@@ -1,0 +1,56 @@
+[
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `plans` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(1000) NULL ,`description` VARCHAR(5000) NULL ,`validity` VARCHAR(1000) NULL ,`igst` FLOAT NULL ,`sgst` FLOAT NULL ,`cgst` FLOAT NULL ,`amount` FLOAT NULL ,  `status` INT NOT NULL DEFAULT '0' ,`createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `company` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(1000) NULL , `email` VARCHAR(1000) NULL , `mobile` BIGINT NULL , `gstin` VARCHAR(100) NULL ,`logoimg` VARCHAR(100) NULL , `status` INT NOT NULL DEFAULT '0' , `address` VARCHAR(5000) NULL , `createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;ALTER TABLE `company` ADD IF NOT EXISTS `approval` INT NULL DEFAULT 0 AFTER `address`;ALTER TABLE `company` ADD IF NOT EXISTS `owner` VARCHAR(100) NULL AFTER `name`;ALTER TABLE `company` ADD IF NOT EXISTS `description` VARCHAR(100) NULL AFTER `logoimg`;ALTER TABLE `company` ADD IF NOT EXISTS `altmobile` VARCHAR(100) NULL AFTER `mobile`;ALTER TABLE `company` ADD IF NOT EXISTS `heading_color` VARCHAR(10) NULL AFTER `altmobile`;ALTER TABLE `company` ADD IF NOT EXISTS `desc_color` VARCHAR(10) NULL AFTER `heading_color`;"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `companyplanallocate` ( `id` INT NOT NULL AUTO_INCREMENT ,  `companyid` INT NULL ,`planid` INT NULL,`renewdate` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ,`expdate` DATETIME NULL DEFAULT NULL , `createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `company_payment` ( `id` INT NOT NULL AUTO_INCREMENT , `companyid` INT NULL ,`planid` INT NULL,`paidamt` FLOAT NULL,`pendingamt` FLOAT NULL,`paymentdate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,`paidby` VARCHAR(100) NULL ,`paymentmode` VARCHAR(50) NULL ,`createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `users` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(1000) NULL , `email` VARCHAR(1000) NULL , `mobile` BIGINT NULL , `role` VARCHAR(100) NULL , `status` INT NOT NULL DEFAULT '0' , `password` VARCHAR(200) NULL , `createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL,`companyid` INT NULL ,`deviceid` VARCHAR(500) NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;ALTER TABLE `users` ADD IF NOT EXISTS `firstlogin` INT NULL DEFAULT NULL AFTER `password`;ALTER TABLE `users` ADD IF NOT EXISTS `customerid` INT NULL DEFAULT NULL AFTER `role`;INSERT INTO `users` (`name`,`email`,`mobile`,`role`,`password`) SELECT * FROM (SELECT 'Mayur Mhatre', 'mhatre975@gmail.com', 9768241151,'Superadmin','fb3d0d8964e294bf48135ca3ad0f183c') AS tmp WHERE NOT EXISTS (SELECT name FROM `users` WHERE `email` = 'mhatre975@gmail.com' AND `mobile` = 9768241151) LIMIT 1;"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `customers` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(1000) NULL , `email` VARCHAR(1000) NULL , `mobile` BIGINT NULL , `type` VARCHAR(100) NULL , `status` INT NOT NULL DEFAULT '0' , `address` VARCHAR(5000) NULL , `createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL, `companyid` INT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;ALTER TABLE `customers` ADD IF NOT EXISTS `owner` VARCHAR(100) NULL DEFAULT '' AFTER `name`;ALTER TABLE `customers` ADD IF NOT EXISTS `allowprdtypes` VARCHAR(1000) NULL DEFAULT NULL AFTER `address`;ALTER TABLE `customers` ADD IF NOT EXISTS `shortform` VARCHAR(1000) NULL DEFAULT NULL AFTER `allowprdtypes`;ALTER TABLE `customers` ADD IF NOT EXISTS `alternate_color_print` INT NOT NULL DEFAULT '0'  AFTER `shortform`;"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `vendors` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(1000) NULL , `email` VARCHAR(1000) NULL , `mobile` BIGINT NULL , `status` INT NOT NULL DEFAULT '0' , `createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL, `companyid` INT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;ALTER TABLE `vendors` ADD IF NOT EXISTS `owner` VARCHAR(100) NULL DEFAULT '' AFTER `name`;ALTER TABLE `vendors` ADD IF NOT EXISTS `shortform` VARCHAR(1000) NULL DEFAULT NULL AFTER `name`"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `products` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(1000) NULL ,`unit` VARCHAR(1000) NULL , `type` VARCHAR(100) NULL , `status` INT NOT NULL DEFAULT '0' ,`createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL, `companyid` INT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;ALTER TABLE `products` ADD IF NOT EXISTS `image` VARCHAR(100) NULL AFTER `type`;ALTER TABLE `products` ADD IF NOT EXISTS `marathi_name` VARCHAR(100) NULL DEFAULT '' AFTER `name`"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `productspricing` ( `id` INT NOT NULL AUTO_INCREMENT , `productid` INT NULL, `price` FLOAT NULL ,`qty` FLOAT NULL ,`unit` VARCHAR(1000) NULL , `status` INT NOT NULL DEFAULT '0' ,`createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL, `companyid` INT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `ordermaster` ( `id` INT NOT NULL AUTO_INCREMENT , `customerid` INT NULL, `grossamt` FLOAT NULL ,`taxamt` FLOAT NULL ,`netamt` FLOAT NULL ,`orderdate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,`invoicestatus` INT NULL,`invoicedate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, `status` INT NOT NULL DEFAULT '0' ,`createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL, `companyid` INT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;ALTER TABLE `ordermaster` ADD IF NOT EXISTS `diliverystatus` INT NULL AFTER `invoicestatus`;ALTER TABLE `ordermaster` ADD IF NOT EXISTS `cartstatus` INT NULL AFTER `diliverystatus`;ALTER TABLE `ordermaster` ADD IF NOT EXISTS `pendingpayment` FLOAT NOT NULL DEFAULT '0' AFTER `cartstatus`;ALTER TABLE `ordermaster` ADD IF NOT EXISTS `deliverycharges` FLOAT NOT NULL DEFAULT '0' AFTER `pendingpayment"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `orderdetails` ( `id` INT NOT NULL AUTO_INCREMENT , `orderid` INT NULL, `productid` INT NULL ,`qty` FLOAT NULL ,`price` FLOAT NULL ,`unit` VARCHAR(1000) NULL ,`netprice` FLOAT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;ALTER TABLE `orderdetails` ADD IF NOT EXISTS `dil_qty` FLOAT NULL AFTER `qty`;ALTER TABLE `orderdetails` ADD IF NOT EXISTS `changed_item` INT NULL AFTER `dil_qty`;ALTER TABLE `orderdetails` ADD IF NOT EXISTS `forstaff` INT NULL AFTER `changed_item`"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `pomaster` ( `id` INT NOT NULL AUTO_INCREMENT , `vendorid` INT NULL, `grossamt` FLOAT NULL ,`taxamt` FLOAT NULL ,`netamt` FLOAT NULL ,`orderdate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,`createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL, `companyid` INT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;ALTER TABLE `pomaster` ADD IF NOT EXISTS `pendingpayment` FLOAT NOT NULL DEFAULT '0' AFTER `netamt`;ALTER TABLE `pomaster` ADD IF NOT EXISTS `status` INT NOT NULL DEFAULT '0' AFTER `pendingpayment`;ALTER TABLE `pomaster` ADD IF NOT EXISTS `paymentstatus` INT NOT NULL DEFAULT '0' AFTER `status`;"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `podetails` ( `id` INT NOT NULL AUTO_INCREMENT , `poorderid` INT NULL, `productid` INT NULL ,`qty` FLOAT NULL ,`price` FLOAT NULL ,`unit` VARCHAR(1000) NULL ,`netprice` FLOAT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `customerordrpayment` ( `id` INT NOT NULL AUTO_INCREMENT , `orderid` INT NULL, `customerid` INT NULL ,`paidamt` FLOAT NULL ,`pendingamt` FLOAT NULL ,`paymentdate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,`paidby` VARCHAR(100) NULL ,`paymentmode` VARCHAR(50) NULL,`paidlumpsum` INT NOT NULL DEFAULT '0', `status` INT NOT NULL DEFAULT '0' ,`createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL, `companyid` INT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;ALTER TABLE `customerordrpayment` ADD IF NOT EXISTS `txnno`  VARCHAR(100) NULL AFTER `paymentmode`;ALTER TABLE `customerordrpayment` ADD IF NOT EXISTS `txndate` DATETIME NULL AFTER `txnno`;ALTER TABLE `customerordrpayment` ADD IF NOT EXISTS `bank` VARCHAR(1000) NULL AFTER `txndate`;"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `vendorpayment` ( `id` INT NOT NULL AUTO_INCREMENT , `orderid` INT NULL, `vendorid` INT NULL ,`paidamt` FLOAT NULL ,`pendingamt` FLOAT NULL ,`paymentdate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,`receivedby` VARCHAR(100) NULL ,`paymentmode` VARCHAR(50) NULL,`paidlumpsum` INT NOT NULL DEFAULT '0', `status` INT NOT NULL DEFAULT '0' ,`createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL, `companyid` INT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;ALTER TABLE `vendorpayment` ADD IF NOT EXISTS `txnno`  VARCHAR(100) NULL AFTER `paymentmode`;ALTER TABLE `vendorpayment` ADD IF NOT EXISTS `txndate` DATETIME NULL AFTER `txnno`;ALTER TABLE `vendorpayment` ADD IF NOT EXISTS `bank` VARCHAR(1000) NULL AFTER `txndate`;"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `customerfeedback` ( `id` INT NOT NULL AUTO_INCREMENT ,`customerid` INT NULL ,`feedback` VARCHAR(100) NULL , `status` INT NOT NULL DEFAULT '0' ,`createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL, `companyid` INT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `notifications` ( `id` INT NOT NULL AUTO_INCREMENT ,`message` VARCHAR(100) NULL , `status` INT NOT NULL DEFAULT '0' ,`createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL, `companyid` INT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `advance_payment` ( `id` INT NOT NULL AUTO_INCREMENT ,`customerid` INT NULL ,`amount` FLOAT NULL , `updateddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;"
+    }
+]
