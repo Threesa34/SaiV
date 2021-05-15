@@ -1,0 +1,87 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+    <a class="navbar-brand" href="" ng-click="getBackToOrderlist()"><i class="fa fa-arrow-left" aria-hidden="true"></i></a> &nbsp;
+    <a class="navbar-brand" href="">Order Cart Details</a>
+
+    <a class="navbar-brand ml-auto" href="" ng-click="AddNewProductsInOrderDetails()"><i class="fa fa-plus-circle" aria-hidden="true"></i></a>
+    <a class="navbar-brand ml-auto" href="" ng-click="saveOrderDetails()"><i class="fa fa-check" aria-hidden="true"></i></a>
+
+    <div class="row">
+        <div class="col-8"><input class="form-control btn-sm" placeholder="Search" ng-model="search.name"></td></div>
+    <div class="col-4">
+        <select class="form-control btn-sm" id="type" ng-model="productType" ng-options="obj.value as obj.title for obj in ProductsType">
+            <option value="" selected disabled>Type</option>
+        </select>
+    </div>
+    </div>
+
+  </nav>
+
+  <div class="container-fluid section mt-4" ng-init="getOrderDetails();productUnits();productTypes();setCartStatus();getProductList()">
+    <div class="row">
+        <div class="col-6 col-md-6 col-lg-6 col-xl-6">
+         <div class="form-group">
+             <label class="col-12">Customer:</label>
+             <strong class="col-12">{{orderDetails.customername}}</strong>
+            <!--  <input type="text" class="form-control btn-sm" ng-model="orderDetails.customername" id="customername"
+                 name="customername" placeholder="Customer" readonly > -->
+         </div>
+        </div>
+        <div class="col-6 col-md-6 col-lg-6 col-xl-6">
+         <div class="form-group">
+             <label class="col-12">Order Date:</label>
+            <!--  <input type="date" class="form-control btn-sm" ng-model="orderDetails.orderdate" id="orderdate"
+                 name="orderdate" readonly > -->
+                 <strong class="col-12">{{ orderDetails.orderdate = orderdetails[0].orderdate | date:"dd/MM/yyyy"}}</strong>
+         </div>
+        </div>
+     </div>
+
+     <div class="row">
+        <div class="col-12 text-right">
+            <button class="btn btn-secondary" ng-click="FillSameQtyInCart()">Fill Same Qty.</button>
+        </div>
+     </div>
+     
+     <div class="row">
+        <div class="table-responsive">
+            <table class="table table-striped text-nowrap">
+                <!-- <thead>
+                    <tr>
+                        <td colspan="3">
+                            <input class="form-control btn-sm" placeholder="Search Products" ng-model="search.name"></td>
+                        <td colspan="2">
+                                <select class="form-control btn-sm" id="type" ng-model="productType" ng-options="obj.value as obj.title for obj in ProductsType">
+                                        <option value="" selected disabled>Type</option>
+                                    </select>
+                        </td>
+                    </tr>
+                </thead> -->
+                <thead>
+                    <!-- <th>#</th> -->
+                    <th>staff</th>
+                    <th>Product</th>
+                    <th>Qty.</th>
+                    <th>Dil. Qty.</th>
+                    <th>Unit</th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="_data in orderdetails | filter:{ type: productType } | filter: search.name" ng-class="{booked_row:_data.isQtySame, low_qty: _data.lowQty}">
+                        <!-- <td><label class="p-2">{{$index +1}}</label></td> -->
+                        <td><button class="btn btn-sm" ng-click="ToggleForStaff(_data)"><i class="fa fa-circle-thin" ng-if="_data.forstaff != 1" aria-hidden="true"></i> <i class="fa fa-circle" ng-if="_data.forstaff == 1" aria-hidden="true"></i></button></td>
+                        <td><select class="form-control btn-sm" ng-model="_data.productid" ng-options="_objs.id as _objs.name for _objs in ProductsList" ng-change="getUnitofProduct(_data);ChangeProduct(_data, {{_data}});"></select>
+                            </td>
+                            <!-- {{_data.productname}}  -->
+                        <td>{{_data.qty}}</td>
+                        <td><input type="number" class="form-control btn-sm"  ng-model="_data.dil_qty" placeholder="Dil. Qty." style="width: 80px;" ng-change="validateCartQty(_data)"/></td>
+                        <td ng-click="setDilQtyAsQty(_data)">{{_data.unit}}</td>
+                        <td>
+                            <i ng-click="removeItemFromCart(_data, $index)" class="fa fa-trash text-danger" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+  </div>

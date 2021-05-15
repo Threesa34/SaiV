@@ -1,0 +1,49 @@
+<div class="wrapper">
+    <div ng-include="'./public/navbar.html'"></div>
+
+    <div class="container-fluid section" ng-init="getUserProfileData()">
+
+        <div class="col-12">
+            <div class="col-4 ml-auto mr-auto">
+                <img src="../images/user.png" class="img-fluid"/>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <form class="form" name="form">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" ng-model="userProfile[0].name" id="name"
+                        name="Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="mibile">Mobile No.:</label>
+                    <input type="number" class="form-control" ng-model="userProfile[0].mobile" id="mibile"
+                        name="mibile" ng-blur="VerifyUserContacts()" required>
+                        <label class="text-danger" ng-if="mobileexist">
+                            {{mobileexist}}
+                        </label>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" ng-model="userProfile[0].email" id="email"
+                        name="email" ng-blur="VerifyUserContacts()" required>
+                        <label class="text-danger" ng-if="emailexist">
+                            {{emailexist}}
+                        </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Role:</label>
+                    <input class="form-control" ng-model="userProfile[0].role" readonly/>
+                </div>
+
+<div class="col-12 text-center">
+    <button type="button" class="btn btn-success" data-dismiss="modal" ng-disabled="form.$invalid || (emailexist || mobileexist)"
+    ng-click="SaveUserProfile()">Update</button>
+</div>
+             
+            </form>
+        </div>
+    </div>
+</div>

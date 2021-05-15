@@ -1,0 +1,134 @@
+<div class="wrapper">
+    <div ng-include="'./public/navbar.html'"></div>
+    <div class="container-fluid section">
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-12">
+                <h4>Vendors</h4>
+            </div>
+            <div class="col-md-4 col-lg-4 col-12 mb-1">
+                <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#modalVendorDetails">Add
+                    New</button>
+                <!-- <button class="btn btn-sm btn-info" data-toggle="modal"
+                    data-target="#ModalImportVendorsDetails">Upload</button> -->
+            </div>
+            <div class="col-md-3 lg-3 xl-3 col-12 ml-auto">
+                <input class="form-control" placeholder="Search" ng-model="search.name"/>
+            </div>
+        </div>
+        
+        <div class="row mt-3" ng-init="getVendorList()">
+            <div class="col-12 col-md-12 col-lg-12" ng-if="VendorsList.length > 0">
+                <div class="table-responsive">
+                    <table id="example" class="table table-striped table-bordered text-nowrap" style="width: 100%;">
+                        <thead>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Owner</th>
+                                <th>Mobile</th>
+                                <th>Email</th>
+                                <th></th>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="_data in VendorsList | filter: search.name">
+                                <td>{{$index +1}}</td>
+                                <td>{{_data.name}}</td>
+                                <td>{{_data.owner}}</td>
+                                <td>{{_data.mobile}}</td>
+                                <td>{{_data.email}}</td>
+                                <td class="text-center text-nowrap"><button class="btn btn-warning btn-sm" ng-click="getVendorDetails(_data)"  data-toggle="modal" data-target="#modalVendorDetails"><i class="fa fa-pencil"></i> Edit</button>&nbsp;<button class="btn btn-danger btn-sm" ng-click="deleteVendorDetails(_data.id)"><i class="fa fa-trash"></i> Delete</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12" ng-if="VendorsList.length == 0">
+            <div class="alert alert-danger text-center">
+                <strong>No record found!</strong>
+              </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- The Modal add Vendor details-->
+<div class="modal fade" id="modalVendorDetails">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Vendor Details</h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <form class="form" name="form">
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" class="form-control" ng-model="VendorDetails[0].name" id="name"
+                                    name="Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="owner">Owner Name:</label>
+                                <input type="text" class="form-control" ng-model="VendorDetails[0].owner" id="owner"
+                                    name="owner" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="mibile">Mobile No.:</label>
+                                <input type="number" class="form-control" ng-model="VendorDetails[0].mobile" id="mibile"
+                                    name="mibile"  maxlength="10" required>
+                            </div>
+                            
+
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" ng-model="VendorDetails[0].email" id="email"
+                                    name="email"  required>
+                            </div>
+
+                         <!--    <div class="form-group">
+                                <label for="address">Address:</label>
+                                <textarea class="form-control" ng-model="VendorDetails[0].address" id="address"
+                                    name="address"></textarea>
+                            </div> -->
+
+                            <div class="form-group">
+                                <label for="type">Short Form:</label>
+                                <input type="text" class="form-control" ng-model="VendorDetails[0].shortform" id="shortform"
+                                    name="shortform">
+                                
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal" ng-disabled="form.$invalid"
+                    ng-click="SaveVendorDetails()">Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- <script>
+  $(document).ready(function() {
+    var table = $('#example').DataTable( {
+        fixedHeader: true,
+        lengthChange: true,
+        buttons: [ 'copy', 'excel', 'pdf' ]
+    } );
+ 
+    table.buttons().container()
+        .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+} );
+</script> -->

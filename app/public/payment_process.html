@@ -1,0 +1,175 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+    <a class="navbar-brand" href="" ng-click="getBackToOrderlist()"><i class="fa fa-arrow-left"
+            aria-hidden="true"></i></a> &nbsp;
+    <a class="navbar-brand" href="">Payment Details</a>
+
+    <a class="navbar-brand ml-auto" href=""><i class="fa fa-check"
+            aria-hidden="true"  ng-show="PaymentinvoiceDetails[0].amounttopaid >= PaymentinvoiceDetails[0].paid_amt" ng-click="savePaymentDetails()"></i></a>
+</nav>
+
+<div class="container-fluid section" ng-init="getInvoiceDetailsForPayment()">
+    <div class="row">
+        <div class="col-6">
+            <div class="col-12">
+                <small>Customer</small>
+            </div>
+            <div class="col-12">
+                <strong>{{PaymentinvoiceDetails[0].cust_name}}</strong>
+            </div>
+        </div>
+        <div class="col-6 text-right">
+            <div class="col-12">
+                <small>Order Date</small>
+            </div>
+            <div class="col-12">
+                <strong>{{PaymentinvoiceDetails[0].orderdate | date:'dd/MM/yyyy'}}</strong>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="col-12">
+                <small>Invoice #</small>
+            </div>
+            <div class="col-12">
+                <strong>{{PaymentinvoiceDetails[0].orderid}}</strong>
+            </div>
+        </div>
+        <div class="col-6 text-right">
+            <div class="col-12">
+                <small>Invoice Date</small>
+            </div>
+            <div class="col-12">
+                <strong>{{PaymentinvoiceDetails[0].invoicedate | date:'dd/MM/yyyy'}}</strong>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-right mt-2 border-top border-secondary">
+            <a class="pt-4" href="" ng-click="toggleOrderList()">View Order</a>
+        </div>
+    </div>
+
+    <div class="row" ng-if="orderList">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped text-nowrap">
+                <thead>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Qty</th>
+                    <th>Rate</th>
+                    <th>NetRate</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="_data in PaymentinvoiceDetails">
+                        <td>{{$index +1}}</td>
+                        <td>{{_data.productname}}</td>
+                        <td>{{_data.qty}} {{_data.unit}}</td>
+                        <td class="text-right">{{_data.price | number:2}}</td>
+                        <td class="text-right">{{_data.netprice | number:2}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+            <div class="col-6 text-left">
+                    <div class="col-12">
+                        <small>Total Amount</small>
+                    </div>
+                    <div class="col-12">
+                        <strong>{{PaymentinvoiceDetails[0].netamt | number:2}}/-</strong>
+                    </div>
+            </div>
+            <div class="col-6 text-right">
+                    <div class="col-12">
+                        <small>Pending Amount</small>
+                    </div>
+                    <div class="col-12">
+                        <strong>{{PaymentinvoiceDetails[0].amounttopaid | number:2}}/-</strong>
+                    </div>
+            </div>
+    </div>
+
+    <div class="row">
+            <div class="col-12 text-center">
+                    <div class="col-12">
+                        <label>Payment Mode</label>
+                    </div>
+                    <div class="col-12">
+                            <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                      <input type="radio" class="form-check-input" name="paymentmode" ng-model="PaymentinvoiceDetails[0].payment_mode" ng-change="setPaymentMode('Cash')" value="Cash">Cash
+                                    </label>
+                             </div>
+                            <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                      <input type="radio" class="form-check-input" name="paymentmode" ng-model="PaymentinvoiceDetails[0].payment_mode" ng-change="setPaymentMode('Cheque')" value="Cheque">Cheque
+                                    </label>
+                             </div>
+                            <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                      <input type="radio" class="form-check-input" name="paymentmode" ng-model="PaymentinvoiceDetails[0].payment_mode" ng-change="setPaymentMode('NEFT')"  value="NEFT">NEFT
+                                    </label>
+                             </div>
+                    </div>
+            </div>
+
+    
+                    <div class="col-12 mt-2" ng-show="PaymentMode != 'Cash'">
+                            <div class="form-group">
+                                <label for="txnno" ng-if="PaymentMode == 'Cheque'">Cheque No.</label>
+                                <label for="txnno" ng-if="PaymentMode == 'NEFT'">Transaction No.</label>
+                                <input type="text" class="form-control" id="txnno" ng-model="PaymentinvoiceDetails[0].txnno"/>
+                            </div>
+                        </div>
+
+                    <div class="col-12 mt-2" ng-show="PaymentMode != 'Cash'">
+                            <div class="form-group">
+                                <label for="txndate" ng-if="PaymentMode == 'Cheque'">Cheque Date</label>
+                                <label for="txndate" ng-if="PaymentMode == 'NEFT'">Transaction Date</label>
+                                <input  ui-date="dateOptions" class="form-control" id="txndate" ng-model="PaymentinvoiceDetails[0].txndate"/>
+                            </div>
+                        </div>
+
+                    <div class="col-12 mt-2" ng-show="PaymentMode == 'Cheque'">
+                            <div class="form-group">
+                                <label for="bank">Bank, Branch</label>
+                                <input type="text" class="form-control" id="bank" ng-model="PaymentinvoiceDetails[0].bank"/>
+                            </div>
+                        </div>
+        
+
+            <div class="col-12 mt-2">
+                <div class="form-group">
+                    <label for="paidamount">Paid Amount</label>
+                    <input type="number" class="form-control" id="paidamount" ng-model="PaymentinvoiceDetails[0].paid_amt"/>
+                    <span class="text-danger" ng-if="PaymentinvoiceDetails[0].paid_amt > PaymentinvoiceDetails[0].netamt">Amount is greter than invoice amount.</span>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="paid_by">Paid By</label>
+                    <input type="text" class="form-control" id="paid_by" ng-model="PaymentinvoiceDetails[0].paid_by"/>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="paiddate">Paid Date</label>
+                    <input  ui-date="dateOptionsFilters"  class="form-control" id="paiddate" ng-model="PaymentinvoiceDetails[0].payment_date"/>
+                </div>
+            </div>
+
+            <div class="col-12 text-right">
+                <div class="form-group">
+                    <label>Pending Amount</label>
+                    <strong class="text-danger" ng-if="PaymentinvoiceDetails[0].amounttopaid < PaymentinvoiceDetails[0].paid_amt">Invalid!</strong>
+                    <strong ng-if="PaymentinvoiceDetails[0].amounttopaid >= PaymentinvoiceDetails[0].paid_amt">{{((PaymentinvoiceDetails[0].amounttopaid - PaymentinvoiceDetails[0].paid_amt)|number:2) || "00.00"}}/-</strong>
+                    <span class="d-none">
+                        {{PaymentinvoiceDetails[0].pendingamt = PaymentinvoiceDetails[0].amounttopaid - PaymentinvoiceDetails[0].paid_amt}}
+                    </span>
+                </div>
+            </div>
+    </div>
+</div>

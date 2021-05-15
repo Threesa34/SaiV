@@ -1,0 +1,112 @@
+<div class="wrapper">
+    <div ng-include="'./public/navbar.html'"></div>
+
+    <div class="container-fluid section" ng-init="getCompanyProfile()">
+        <div class="col-12">
+            <div class="col-4 ml-auto mr-auto">
+
+                <img id="logoimg" style="height: 60px;width: auto;" src="http://103.252.7.5:8029/uploads/{{CompanyDetails[0].logoimg}}" />
+
+                
+            </div>
+        </div>
+        <div class="col-12">
+            <form class="form" name="form">
+                <div class="row">
+                <div class="col-12">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" ng-model="CompanyDetails[0].name" id="name"
+                    name="Name" required>
+            </div>
+            </div>
+            <div class="col-12">
+            <div class="form-group">
+                <label for="owner">Owner Name:</label>
+                <input type="text" class="form-control" ng-model="CompanyDetails[0].owner" id="owner"
+                    name="owner" required>
+            </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label for="mibile">Mobile No.:</label>
+                <input type="number" class="form-control" ng-model="CompanyDetails[0].mobile" id="mibile"
+                    name="mibile" ng-blur="VerifyCompanyContacts()" required>
+                    <label class="text-danger" ng-if="mobileexist" maxlength="10">
+                        {{mobileexist}}
+                    </label>
+            </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-6">
+                <div class="form-group">
+                    <label for="altmobile">Alt. Mobile No.:</label>
+                    <input type="number" class="form-control" ng-model="CompanyDetails[0].altmobile" id="altmobile"
+                        name="altmobile" maxlength="10">
+                </div>
+                </div>
+
+            
+            <div class="col-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" ng-model="CompanyDetails[0].email" id="email"
+                    name="email" ng-blur="VerifyCompanyContacts()" required>
+                    <label class="text-danger" ng-if="emailexist">
+                        {{emailexist}}
+                    </label>
+            </div>
+            </div>
+            <div class="col-12">
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <textarea class="form-control" ng-model="CompanyDetails[0].address" id="address"
+                    name="address"></textarea>
+            </div>
+            </div>
+            
+            <div class="col-12">
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea class="form-control" ng-model="CompanyDetails[0].description" id="description"
+                    name="description"></textarea>
+            </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="form-group">
+                <label for="gstin">GSTIN:</label>
+              <input class="form-control" id="gstin" ng-model="CompanyDetails[0].gstin"/>
+            </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="form-group">
+                            <label for="type">image:</label>
+                            <input type="file" id="logoimg" ngf-select ng-model="logoimg" name="file"
+                                ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"
+                                ngf-resize="{width: 100, height: 100}" onchange="angular.element(this).scope().setImagePreview(this)">
+                        </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="heading_color">Heading Color:</label>
+                  <input  type="color" class="form-control" id="heading_color" ng-model="CompanyDetails[0].heading_color"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="desc_color">Description Color:</label>
+                  <input type="color"  class="form-control" id="desc_color" ng-model="CompanyDetails[0].desc_color"/>
+                </div>
+            </div>
+
+            </div>
+        
+        </form>
+        </div>
+        <div class="col-12 text-center">
+            <button type="button" class="btn btn-success" data-dismiss="modal" ng-disabled="form.$invalid || (emailexist || mobileexist)"
+            ng-click="SaveCompanyProfile()">Save</button>
+        </div>
+    </div>
+</div>

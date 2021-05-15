@@ -1,0 +1,125 @@
+      <div class="wrapper">
+        <div ng-include="'./public/navbar.html'"></div>
+        <div class="container-fluid section">
+         
+          <div class="row">
+            <div class="col-md-12 col-lg-12 col-12">
+                <h4>Dashboard</h4>
+            </div>
+           
+            <div class="col-md-4 col-lg-4 col-12 ml-auto">
+              <div class="row" ng-init="getDashboardValues()">
+                  <div class="col-md-6 col-6 col-lg-6">
+                          <div class="form-group">
+                                  <label for="order-date">Date From</label>
+                                  <input ui-date="dateOptionsFilters" id="order-date" ng-model="Date_from" ng-change="getDashboardValues(Date_from, Date_to)" class="form-control"/>
+                              </div>
+                  </div>
+                  <div class="col-md-6 col-6 col-lg-6">
+                          <div class="form-group">
+                                  <label for="order-date">To</label>
+                                  <input ui-date="dateOptionsFilters" id="order-date-to" ng-model="Date_to" ng-change="getDashboardValues(Date_from, Date_to)" class="form-control"/>
+                              </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+          <div class="row mt-4 mb-4">
+            <div class="col-sm-6 col-12 col-lg-6 col-xl-6 col-md-6">
+                <div class="row">
+                  <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-12 mt-2" ng-click="RedirectLink('/products')">
+                    <div class="card bg-orange-gradient p-1">
+                      <div class="card-body text-left text-white">
+                        <h4>Products</h4>
+                        <h3>{{dashboardValues[0].products_count}}</h3>
+                      </div>
+                    </div>
+                  </div>
+      
+                  <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-12 mt-2" ng-click="RedirectLink('/vendors')">
+                    <div class="card bg-easymed p-1">
+                      <div class="card-body text-left text-white">
+                        <h4>Vendors</h4>
+                        <h3>{{dashboardValues[0].vendor_counts}}</h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-12 mt-2" ng-click="RedirectLink('/customers')">
+                    <div class="card bg-cool-blue p-1">
+                      <div class="card-body text-left text-white">
+                        <h4>Customers</h4>
+                        <h3>{{dashboardValues[0].customer_counts}}</h3>
+                      </div>
+                    </div>
+                  </div>
+      
+                  <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-12 mt-2" ng-click="RedirectLink('/orders')">
+                    <div class="card bg-dimigo p-1">
+                      <div class="card-body text-left text-white">
+                        <h4>Orders</h4>
+                        <h3>{{dashboardValues[0].orders_count}}</h3>
+                      </div>
+                    </div>
+                  </div>
+      
+                  <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-12 mt-2" ng-click="RedirectLink('/invoice')">
+                    <div class="card bg-orca p-1">
+                      <div class="card-body text-left text-white">
+                        <h4>Invoices</h4>
+                        <h3>{{dashboardValues[0].invoice_count}}</h3>
+                      </div>
+                    </div>
+                  </div>
+      
+                  <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-12 mt-2" ng-click="RedirectLink('/payment')">
+                    <div class="card bg-hydrogen p-1">
+                      <div class="card-body text-left text-white">
+                        <h4>Payment</h4>
+                        <h3>{{(dashboardValues[0].total_payment | number:2) || "00.00"}}/-</h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-12 col-lg-6 col-xl-6 col-md-6">
+              <div class="card mt-2">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-sm-6 col-6 col-lg-6 col-md-6"><h4>Total Quantity</h4></div>
+                  <div class="col-sm-6 col-6 col-lg-6 col-md-6 text-right">
+                    <input class="form-control-sm mt-1" ng-model="search.name" placeholder="Search">
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+              <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <th>#</th>
+                      <th>Particular</th>
+                      <th>Order Qty.</th>
+                      <th>Dellivered Qty.</th>
+                      <th>Balance</th>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="_data in OrderQuantityList | filter: search.name">
+                        <td>{{$index +1}}</td>
+                        <td>{{_data.name}}</td>
+                        <td>{{_data.total_qty}}</td>
+                        <td>{{_data.total_dil_qty}}</td>
+                        <td>{{_data.total_qty - _data.total_dil_qty}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+              </div>
+              </div>
+              </div>
+            </div>
+
+          </div>
+          
+        </div>
+      </div>

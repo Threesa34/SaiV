@@ -1,0 +1,81 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+    <a class="navbar-brand" href="" ng-click="getBackToOrderlist()"><i class="fa fa-arrow-left" aria-hidden="true"></i></a> &nbsp;
+    <a class="navbar-brand" href="">Invoice</a>
+
+    <a class="navbar-brand ml-auto" href="" ng-click="generateInvoice()"><i class="fa fa-check" aria-hidden="true"></i></a>
+
+    <div class="row">
+        <div class="col-8"><input class="form-control btn-sm" placeholder="Search" ng-model="search.name"></td></div>
+    <div class="col-4">
+        <select class="form-control btn-sm" id="type" ng-model="productType" ng-options="obj.value as obj.title for obj in ProductsType">
+            <option value="" selected disabled>Type</option>
+        </select>
+    </div>
+    </div>
+
+  </nav>
+
+  <div class="container-fluid section mt-4" ng-init="getOrderDetails();productUnits();productTypes();">
+    <div class="row">
+        <div class="col-6 col-md-6 col-lg-6 col-xl-6">
+         <div class="form-group">
+             <label class="col-12">Customer:</label>
+             <strong>{{orderDetails.customername}}</strong>
+             <!-- <input type="text" class="form-control btn-sm" ng-model="orderDetails.customername" id="customername"
+                 name="customername" placeholder="Customer" readonly > -->
+         </div>
+        </div>
+        <div class="col-6 col-md-6 col-lg-6 col-xl-6">
+         <div class="form-group">
+             <label class="col-12">Order Date:</label>
+             <strong>{{orderDetails.orderdate = orderdetails[0].orderdate | date: "dd/MM/yyyy"}}</strong>
+             <!-- <input type="date" class="form-control btn-sm" ng-model="orderDetails.orderdate" id="orderdate"
+                 name="orderdate" readonly > -->
+         </div>
+        </div>
+     </div>
+
+
+     <div class="row">
+        <div class="table-responsive">
+            <table class="table table-striped text-nowrap">
+              <!--   <thead>
+                    <tr>
+                        <td colspan="3">
+                            <input class="form-control btn-sm" placeholder="Search Products" ng-model="search.name"></td>
+                        <td colspan="2">
+                                <select class="form-control btn-sm" id="type" ng-model="productType" ng-options="obj.value as obj.title for obj in ProductsType">
+                                        <option value="" selected disabled>Type</option>
+                                    </select>
+                        </td>
+                    </tr>
+                </thead> -->
+                <thead class="text-nowrap">
+                    <th>#</th>
+                    <th>Product</th>
+                    <th>Dil. Qty.</th>
+                    <th>Rate (/10 Kg.)</th>
+                    <th>Total</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="_data in orderdetails | filter:{ type: productType } | filter: search.name">
+                        <td><label class="p-2">{{$index +1}}</label></td>
+                        <td><small class="text-danger" ng-if="_data.forstaff == 1">(staff)</small> {{_data.productname}} <small class="marathi-input">{{_data.marathi_name}}</small></td>
+                        <td><input type="number" class="form-control btn-sm col-6"  ng-model="_data.dil_qty" placeholder="Rate"/> {{_data.unit}}</td>
+                        <td><input type="number" class="form-control btn-sm col-6"  ng-model="_data.price" placeholder="Rate"/></td>
+                        <td>{{(_data.netprice = ((_data.dil_qty * _data.price)/10) |number:2 )||"00.00"}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-right"><strong>Delivery Charges</strong></td>
+                        <td colspan="2"><input type="number" class="form-control" ng-model="orderdetails[0].deliverycharges"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-right"><strong>Total</strong></td>
+                        <td colspan="2" class="text-right"><strong>{{(orderdetails[0].totalAmount =(getTotal() + orderdetails[0].deliverycharges) |number:2 )|| "00.00" }}/-</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+  </div>

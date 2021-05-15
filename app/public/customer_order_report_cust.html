@@ -1,0 +1,75 @@
+<div class="wrapper">
+    <div ng-include="'./public/navbar.html'"></div>
+    
+    <div class="container-fluid section">
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-12">
+                <h4>Order Report</h4>
+            </div>
+            <div class="col-md-4 col-lg-4 col-12">
+            </div>
+
+            <div class="col-md-6 col-lg-6 col-12 ml-auto" >
+                <div class="row">
+                    
+                    <div class="col-md-4 col-6 col-lg-4">
+                            <div class="form-group">
+                                    <label for="order-date">Order Date From</label>
+                                    <input ui-date="dateOptionsFilters" id="order-date" ng-model="orderDate_from" ng-change="getCustomerOrderReport(customername,orderDate_from, orderDate_to )" class="form-control"/>
+                                </div>
+                    </div>
+                    <div class="col-md-4 col-6 col-lg-4">
+                            <div class="form-group">
+                                    <label for="order-date">To</label>
+                                    <input ui-date="dateOptionsFilters" id="order-date-to" ng-model="orderDate_to" ng-change="getCustomerOrderReport(customername,orderDate_from, orderDate_to )" class="form-control"/>
+                                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-init="getCustomerOrderReport(customername,orderDate_from, orderDate_to )">
+            <div class="col-12 col-md-4 col-lg-4 colxl-4">
+                <input class="form-control" placeholder="Search" ng-model="search.order"/> &nbsp;
+            </div>
+        </div>
+
+        <div class="row" ng-if="customerOrderReportData.length > 0">
+            <div class="col-12">
+
+            <div class="table-responsive">
+                <table id="example" class="table table-striped table-bordered text-nowrap" style="width: 100%;">
+                    <thead>
+                            <th>#</th>
+                            <th>Order Date</th>
+                            <th>Invoice Date</th>
+                            <th>Order Amount</th>
+                            <th>No. of Items</th>
+                            <th>Payment Status</th>
+                            <th>Pending Amount</th>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="_data in customerOrderReportData | filter: search.name">
+                            <td class="text-nowrap">{{$index +1}}</td>
+                            <td class="text-center">{{_data.orderdate | date:'dd/MM/yyyy'}}</td>
+                            <td class="text-center">{{_data.invoicedate | date:'dd/MM/yyyy'}}</td>
+                            <td class="text-right">{{_data.net_amount | number:2}}</td>
+                            <td>{{_data.total_items}}</td>
+                            <td>{{_data.payment_status}}</td>
+                            <td class="text-right">{{_data.pendingpayment | number:2}}</td>
+                           
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+       
+        <div class="col-12" ng-if="customerOrderReportData.length == 0">
+            <div class="alert alert-danger text-center">
+                <strong>No record found!</strong>
+              </div>
+        </div>
+
+    </div>
+</div>

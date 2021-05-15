@@ -1,0 +1,113 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+    <a class="navbar-brand" href="" ng-click="getBackToOrderlist()"><i class="fa fa-arrow-left" aria-hidden="true"></i></a> &nbsp;
+    <a class="navbar-brand" href="">Purchanse Order</a>
+    <a class="navbar-brand ml-auto" href="" ng-click="savePurchaseOrderDetails()"><i class="fa fa-check" aria-hidden="true"></i></a>
+    <div class="row">
+        <div class="col-8"><input class="form-control btn-sm" placeholder="Search Products" ng-model="search.name"></td></div>
+    <div class="col-4">
+        <select class="form-control btn-sm" id="type" ng-model="productType" ng-options="obj.value as obj.title for obj in ProductsType">
+            <option value="" selected disabled>Type</option>
+        </select>
+    </div>
+    </div>
+  </nav>
+
+
+  
+
+
+  <div class="container-fluid section mt-4" ng-init="InitPurchaseFunctions()">
+    <div class="row">
+        <div class="col-6 col-md-6 col-lg-6 col-xl-6" ng-show="userDetails.role != 'customer' && userDetails.role != 'customer_admin'">
+         <div class="form-group">
+             <label for="vendorname">Vendor:</label>
+             <select  class="form-control btn-sm" id="vendorname"
+             name="vendorname" ng-model="SelectedVendor" ng-options="obj.id as obj.name for obj in VendorsList">
+             <option selected disabled value="">--SELECT--</option>
+            </select>
+           <!--   <input type="text" ng-model="orderDetails.customername" id="customername"
+                 name="customername" uib-typeahead="obj as obj.name for obj in CustomersList | filter:$viewValue " typeahead-on-select="setCustomerDetails(orderDetails.customername)" placeholder="Search Customer" autocomplete="off"  > -->
+         </div>
+        </div>
+        <div class="col-6 col-md-6 col-lg-6 col-xl-6" ng-class="{'col-12':(userDetails.role == 'customer' && userDetails.role == 'customer_admin')}">
+         <div class="form-group">
+             <label for="orderdate">Order Date:</label>
+             <input ui-date="dateOptionsFilters" class="form-control btn-sm" ng-model="poOrderdate" id="orderdate"
+                 name="orderdate" autocomplete="off" >
+         </div>
+        </div>
+     </div>
+
+
+     <div class="row mb-4 pb-4">
+        <div class="col-md-3 col-lg-3 col-sm-6 col-12 mt-1" ng-repeat="_data in ProductsList | filter:{ type: productType } | filter: search.name">
+            <div class="card border-dark">
+            
+                <div class="navbar navbar-expand-sm border-bottom border-dark bg-light" style="padding: .5px;" ng-class="{booked_row:validateEntries(_data) , recently_updated:_data.isRecentlyUpdated, deleted_row: _data.isDelete}">
+                    <div class="col-sm-12"><strong>{{_data.name}} &nbsp;<small class="marathi-input">{{_data.marathi_name}}</small></strong>
+                        <span ng-show="_data.purchaseOrderDetailsId" style="float: right;">&nbsp; <a href='' class="text-danger" ng-show="!_data.isDelete" ng-click="_data.isDelete = true;deductAmount(_data)"><i class="fa fa-trash" aria-hidden="true"></i></a> &nbsp;<a href='' ng-show="_data.isDelete" class="text-white" ng-click="_data.isDelete = false;revertAmount(_data)"><i class="fa fa-refresh" aria-hidden="true"></i></a></span>
+                    </div>
+                </div>
+                <div class="col-sm-12 mt-2 mb-2">
+                <div class="row">
+                        <div class="col-sm-4 col-lg-4 col-md-4 col-4"><div class="form-group">
+                            <label>Qty.</label> <input type='number' class="form-control"  ng-model="_data.qty" placeholder="Qty." style="width:100%" ng-change="validateRecentlyUpdated(_data,{{_data}})" ng-blur="getTotalPoAmount()"/> </div></div>
+                        <div class="col-sm-4 col-lg-4 col-md-4 col-4">
+                            <div class="form-group">
+                                <label>Unit</label>
+                            <select class="form-control" ng-model="_data.unit" style="width: 100%;" ng-options="obj for obj in productUnit" ng-change="validateRecentlyUpdated(_data,{{_data}})">
+                            <option value="" selected disabled>Select</option>
+                        </select></div></div>
+                        <div class="col-sm-4 col-lg-4 col-md-4 col-4">
+                            <div class="form-group">
+                                <label>Rate (10 kg)</label>
+                                <input type='number' class="form-control"  ng-model="_data.price" placeholder="Rate (10 kg)" style="width:100%" ng-change="validateRecentlyUpdated(_data,{{_data}})" ng-blur="getTotalPoAmount()"/>
+                            </div>
+                            </div>
+                </div>
+                </div>
+                <div class="navbar navbar-expand-sm border-top border-dark text-right" style="padding: .5px;">
+                   <div class="col-12">
+                       <strong>{{(_data.netprice = (_data.price/10 * _data.qty) | number:2) || '00.00'}}/-</strong>
+                   </div>
+                </div>
+            </div>
+        </div>    
+     </div>
+
+     <!-- 
+         <div class="row mb-4">
+        <div class="table-responsive">
+            <table class="table table-striped  table-bordered text-nowrap">
+                <thead>
+                    <th>#</th>
+                    <th>Product</th>
+                    <th>Qty.</th>
+                    <th>Unit</th>
+                    <th>Rate <small>(10 kg)</small></th>
+                    <th>Total</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="_data in ProductsList | filter:{ type: productType } | filter: search.name" ng-class="{booked_row:validateEntries(_data) , recently_updated:_data.isRecentlyUpdated}">
+                        <td>{{$index +1}} <span ng-show="_data.purchaseOrderDetailsId">&nbsp; <a href='' class="text-danger"><i class="fa fa-trash" aria-hidden="true"></i></a> &nbsp;<a href='' class="text-white"><i class="fa fa-refresh" aria-hidden="true"></i></a></span>
+                        </td>
+                        <td>{{_data.name}} <small class="marathi-input">{{_data.marathi_name}}</small></td>
+                        <td style="width: 3.5em;"><input type='number' class="form-control"  ng-model="_data.qty" placeholder="Qty." style="width:100%" ng-change="validateRecentlyUpdated(_data,{{_data}})" ng-blur="getTotalPoAmount()"/></td>
+                        <td style="width: 3.5em;"><select class="form-control" ng-model="_data.unit" style="width: 100%;" ng-options="obj for obj in productUnit" ng-change="validateRecentlyUpdated(_data,{{_data}})">
+                            <option value="" selected disabled>Select</option>
+                        </select></td>
+                        <td style="width: 3.5em;"><input type='number' class="form-control"  ng-model="_data.price" placeholder="Rate" style="width:100%" ng-change="validateRecentlyUpdated(_data,{{_data}})" ng-blur="getTotalPoAmount()"/></td>
+                        <td style="width: 4em;">{{(_data.netprice = (_data.price/10 * _data.qty) | number:2) || '00.00'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+      -->
+         
+  <footer class="footer fixed-bottom bg-dark p-1 mt-4">
+    <div class="container text-right">
+      <span class="text-light text-right">Total Amount: {{(totalPoAmount | number:2) || '00.00'}}/-</span>
+    </div>
+  </footer>
+  </div>

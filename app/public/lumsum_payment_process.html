@@ -1,0 +1,158 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+    <a class="navbar-brand" href="" ng-click="getBackToOrderlist()"><i class="fa fa-arrow-left"
+            aria-hidden="true"></i></a> &nbsp;
+    <a class="navbar-brand" href="">Payment Details</a>
+
+    <a class="navbar-brand ml-auto" href="">
+        <i class="fa fa-check"
+            aria-hidden="true"  ng-show="ValidatePaymentConditions()" ng-click="saveLumsumPaymentDetails()"></i>
+    </a>
+</nav>
+
+<div class="container-fluid section" ng-init="getCustomerAdvancePayment()">
+    <div class="row">
+        <div class="col-6">
+                <label class="col-12">Customer:</label>
+                <strong class="col-12">{{getCustomerName()}}</strong>
+        </div>
+
+        <div class="col-6">
+                <div class="form-group">
+             <label for="paymentamount">Paid Amount:</label>
+             <div class="input-group">
+                    <input  type="number" class="form-control btn-sm" ng-model="paymentamount" id="paymentamount"
+                    name="paymentamount" >
+                    <div class="input-group-append"  ng-click="getInvoiceListForLumsumPayment(paymentamount)">
+                      <span class=" btn btn-secondary btn-sm" id="basic-addon2">Done</span>
+                    </div>
+                  </div>
+         </div>
+        </div>
+        <div class="col-6 text-left">
+                <div class="col-12">
+             <small>Advanced Amount:</small>
+                </div>
+                <div class="col-12">
+             <strong>{{advanceAmount | number:2}}</strong>
+                </div>
+         </div>
+        <div class="col-6 text-right">
+                <div class="col-12">
+             <small>Total Amount:</small>
+                </div>
+                <div class="col-12">
+             <strong>{{totalAmount  = (advanceAmount + paymentamount)| number:2}}</strong>
+            </div>
+         </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 text-center">
+                <div class="col-12">
+                    <label>Payment Mode</label>
+                </div>
+                <div class="col-12">
+                        <div class="form-check-inline">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" name="paymentmode" ng-model="lumsumpaymentDetails[0].payment_mode" ng-change="setPaymentMode('Cash')" value="Cash">Cash
+                                </label>
+                         </div>
+                        <div class="form-check-inline">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" name="paymentmode" ng-model="lumsumpaymentDetails[0].payment_mode" ng-change="setPaymentMode('Cheque')" value="Cheque">Cheque
+                                </label>
+                         </div>
+                        <div class="form-check-inline">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" name="paymentmode" ng-model="lumsumpaymentDetails[0].payment_mode" ng-change="setPaymentMode('NEFT')"  value="NEFT">NEFT
+                                </label>
+                         </div>
+                </div>
+        </div>
+
+
+                <div class="col-6 mt-2" ng-show="PaymentMode != 'Cash'">
+                        <div class="form-group">
+                            <label for="txnno" ng-if="PaymentMode == 'Cheque'">Cheque No.</label>
+                            <label for="txnno" ng-if="PaymentMode == 'NEFT'">Transaction No.</label>
+                            <input type="text" class="form-control" id="txnno" ng-model="lumsumpaymentDetails[0].txnno"/>
+                        </div>
+                    </div>
+
+                <div class="col-6 mt-2" ng-show="PaymentMode != 'Cash'">
+                        <div class="form-group">
+                            <label for="txndate" ng-if="PaymentMode == 'Cheque'">Cheque Date</label>
+                            <label for="txndate" ng-if="PaymentMode == 'NEFT'">Transaction Date</label>
+                            <input  ui-date="dateOptions" class="form-control" id="txndate" ng-model="lumsumpaymentDetails[0].txndate"/>
+                        </div>
+                    </div>
+
+                <div class="col-6 mt-2" ng-show="PaymentMode == 'Cheque'">
+                        <div class="form-group">
+                            <label for="bank">Bank, Branch</label>
+                            <input type="text" class="form-control" id="bank" ng-model="lumsumpaymentDetails[0].bank"/>
+                        </div>
+                    </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label for="paid_by">Paid By</label>
+                <input type="text" class="form-control" id="paid_by" ng-model="lumsumpaymentDetails[0].paid_by"/>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label for="paiddate">Paid Date</label>
+                <input  ui-date="dateOptions"  class="form-control" id="paiddate" ng-model="lumsumpaymentDetails[0].payment_date"/>
+            </div>
+        </div>
+
+        
+</div>
+
+    <div class="row mt-3">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <head>
+                    <th>#</th>
+                    <th>Order Date</th>
+                    <th>Invoice Date</th>
+                    <th>Amount</th>
+                    <th>Paid Amount</th>
+                    <th>Balance</th>
+                </head>
+                <tbody>
+                    <tr ng-repeat="_data in InvoiceListforPayments">
+                        <td>{{$index +1}}</td>
+                        <td class="text-center">{{_data.orderdate | date:'dd/MM/yyyy'}}</td>
+                        <td class="text-center">{{_data.invoicedate | date:'dd/MM/yyyy'}}</td>
+                        <td class="text-right">{{_data.pendingpayment | number:2}}</td>
+                        <td class="text-right">{{_data.paidamt = totalAmount - (InvoiceListforPayments[$index -1].pendingpayment + InvoiceListforPayments[$index +1].paidamt) | number:2}}</td>
+                        <td class="text-right">{{_data.balance = (_data.paidamt - _data.pendingpayment) | number:2}}</td>
+                    </tr>
+                </tbody>
+                <!-- <tbody ng-if="InvoiceListforPayments.length == 1">
+                    <tr ng-repeat="_data in InvoiceListforPayments">
+                        <td>{{$index +1}}</td>
+                        <td class="text-center">{{_data.orderdate | date:'dd/MM/yyyy'}}</td>
+                        <td class="text-center">{{_data.invoicedate | date:'dd/MM/yyyy'}}</td>
+                        <td class="text-right">{{_data.pendingpayment | number:2}}</td>
+                        <td class="text-right">{{_data.paidamt = InvoiceListforPayments[$index ].pendingpayment | number:2}}</td>
+                        <td class="text-right">{{_data.balance = (_data.paidamt - _data.pendingpayment) | number:2}}</td>
+                    </tr>
+                </tbody> -->
+            </table>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-12 text-right">
+            <small>Advance Balance:</small>
+        </div>
+        <div class="col-12 text-right" ng-if="(totalAmount - TotalPaymentAmount) > 0">
+            <strong>{{ lumsumpaymentDetails[0].adnvanceBalanceAmount = (totalAmount - TotalPaymentAmount)| number:2}}</strong>
+        </div>
+        <div class="col-12 text-right" ng-if="(totalAmount - TotalPaymentAmount) < 0">
+            <strong>{{ lumsumpaymentDetails[0].adnvanceBalanceAmount = 0| number:2}}</strong>
+        </div>
+    </div>
+</div>

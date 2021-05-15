@@ -1,0 +1,211 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+    <a class="navbar-brand" href="" ng-click="getBackToOrderlist()"><i class="fa fa-arrow-left"
+            aria-hidden="true"></i></a>  
+    <a class="navbar-brand" href="">Invoice</a>
+ 
+    <a class="navbar-brand ml-auto" href="" ng-click="shareInvoice('invoice-print')"><i class="fa fa-share-alt"
+            aria-hidden="true"></i></a> 
+    <a class="navbar-brand" href="" ng-click="printInvoice('invoice-print')"><i class="fa fa-print"
+            aria-hidden="true"></i></a>
+ 
+            <div class="row">
+                <div class="col-8"><input class="form-control btn-sm" placeholder="Search" ng-model="search.name"></td></div>
+            <div class="col-4">
+                <select class="form-control btn-sm" id="type" ng-model="productType" ng-options="obj.value as obj.title for obj in ProductsType">
+                    <option value="" selected disabled>Type</option>
+                </select>
+            </div>
+            </div>
+ 
+</nav>
+ 
+<div class="container-fluid section mt-4" ng-init="getOrderDetails();productUnits();productTypes();">
+    <div class="row">
+        <div class="col-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="form-group">
+                <label class="col-12">Customer:</label>
+                <strong class="col-12">{{orderDetails.customername}}</strong>
+                <!-- <input type="text" class="form-control btn-sm" ng-model="orderDetails.customername" id="customername"
+                 name="customername" placeholder="Customer" readonly > -->
+            </div>
+        </div>
+        <div class="col-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="form-group">
+                <label class="col-12">Order Date:</label>
+                <strong
+                    class="col-12">{{orderDetails.orderdate = orderdetails[0].orderdate | date:"dd/MM/yyyy"}}</strong>
+                <!--  <input type="date" class="form-control btn-sm" ng-model="orderDetails.orderdate" id="orderdate"
+                 name="orderdate" readonly > -->
+            </div>
+        </div>
+        <div class="col-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="form-group">
+                <label class="col-12">Invoice #:</label>
+                <strong class="col-12">{{orderDetails.orderid}}</strong>
+                <!-- <input type="text" class="form-control btn-sm" ng-model="orderDetails.customername" id="customername"
+                 name="customername" placeholder="Customer" readonly > -->
+            </div>
+        </div>
+        <div class="col-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="form-group">
+                <label class="col-12">Invoice Date:</label>
+                <strong class="col-12">{{orderdetails[0].invoicedate | date:"dd/MM/yyyy"}}</strong>
+                <!--  <input type="date" class="form-control btn-sm" ng-model="orderDetails.orderdate" id="orderdate"
+                 name="orderdate" readonly > -->
+            </div>
+        </div>
+    </div>
+ 
+ 
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-striped text-nowrap">
+                <thead>
+                  <!--   <tr>
+                        <td colspan="3">
+                            <input class="form-control btn-sm" placeholder="Search Products" ng-model="search.name">
+                        </td>
+                        <td colspan="2">
+                            <select class="form-control btn-sm" id="type" ng-model="productType"
+                                ng-options="obj.value as obj.title for obj in ProductsType">
+                                <option value="" selected disabled>Type</option>
+                            </select>
+                        </td>
+                    </tr> -->
+                </thead>
+                <thead class="text-nowrap text-center">
+                    <th>#</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Rate (/10 Kg.)</th>
+                    <th>Total</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="_data in orderdetails | filter:{ type: productType } | filter: search.name">
+                        <td><label class="p-2">{{$index +1}}</label></td>
+                        <td>{{_data.productname}}   <small class="marathi-input">{{_data.marathi_name}}</small>
+                        </td>
+                        <td>{{_data.dil_qty}} {{_data.unit}}</td>
+                        <td class="text-right">{{_data.price |number:2}}</td>
+                        <td class="text-right">
+                            {{_data.netprice = (((_data.dil_qty * _data.price)/10) |number:2 )||"00.00"}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-right"><small>Delivery Charges</small></td>
+                        <td colspan="2" class="text-right">
+                            <small>{{(orderdetails[0].deliverycharges |number:2 )|| "00.00" }}/-</small></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-right"><strong>Total</strong></td>
+                        <td colspan="2" class="text-right">
+                            <strong>{{(orderdetails[0].totalAmount = (getTotal() + orderdetails[0].deliverycharges) |number:2 )|| "00.00" }}/-</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="bill-header" class="row" style="display: none;" ng-init="getCompanyDetailsforInvoice();">
+
+        <table  class="table table-bordered" style=" display: fixed;width: 3.74in;">
+            <thead >
+                <tr>
+                    <td colspan="5">
+                        <div class="row">
+                            <div class="col-12 col-md-12">
+                                <div class="inv-header col-12 col-md-12 text-center">{{companyDetails[0].name}}</div>
+                                <div class="inv-descriotion col-12 col-md-12 text-center">{{companyDetails[0].description}}</div>
+                                <div class="col-12 col-md-12 text-left inv-descriotion">
+                                    <small>{{companyDetails[0].address}}</small><small ng-if="companyDetails[0].mobile">,
+                                        {{companyDetails[0].mobile}}</small>
+                                    <small ng-if="companyDetails[0].altmobile != null">
+                                        ,
+                                    </small>
+                                    <small>{{companyDetails[0].altmobile}}</small> <small ng-if="companyDetails[0].email">,
+                                        {{companyDetails[0].email}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <div class="row inv-cust">
+                            <div class="col-12 col-md-12 col-sm-12">
+                                <strong>{{orderdetails[0].cust_name}}</strong>
+                            </div>
+                            <div class="col-12">
+                                <small>{{orderdetails[0].cust_addr}} <small ng-if="orderdetails[0].cust_mobile">,
+                                    </small>{{orderdetails[0].cust_mobile}}</small>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="inv-cust">
+                    <td colspan="2">
+                        <div class="col-12 col-md-12">
+                            Invoice No.
+                        </div>
+                        <div class="col-12 col-md-12">
+                           
+                            <strong> {{orderdetails[0].orderid}}</strong>
+                        </div>
+                    </td>
+                        <td colspan="3" class="text-right">
+                            <div class="col-12 col-md-12">
+                                Invoice Date
+                            </div>
+                            <div class="col-12 col-md-12">
+                                <strong>{{orderdetails[0].invoicedate | date:"dd/MM/yyyy"}}</strong>
+                            </div>
+                    </td>
+                </tr>
+            </thead>
+        </table>
+
+
+    </div>
+
+ 
+    <div id="invoice-print" class="row" style="display: none;">
+
+       
+            <table class="table table-bordered" style=" display: fixed;width: 3.74in;">
+                
+                <thead class="text-center inv-descriotion">
+                         <th style="width: 3px;">#</th>
+                        <th style="width: 50px;">Particulars</th>
+                        <th style="width: 8px;">Quanity</th>
+                        <th style="width: 10px;white-space: pre-line; ">Rate (10Kg.)</th>
+                        <th style="width: 10px;">Net Price</th>
+                </thead>
+                <tbody class="inv-descriotion">
+
+                    <!-- <small class="marathi-input">{{_data.marathi_name}}</small> -->
+                    <tr  ng-repeat="_data in orderdetails">
+                        <td style="width: 3px;">{{$index +1}}</td>
+                        <td style="width: 50px;">{{_data.productname}} </td>
+                        <td style="width: 8px;">{{_data.dil_qty}} <span class="ext-sm-txt">{{_data.unit}}</span></td>
+                        <td style="text-align:right ;width: 10px;">{{_data.price |number:2}}</td>
+                        <td style="text-align:right;width: 10px;">{{(_data.netprice = ((_data.dil_qty * _data.price)/10) |number:2 )||"00.00"}}</td>
+                    </tr >
+                    <tr>
+                        <td colspan="5" style="text-align:right"><small>Delivery Charges:    
+                        {{(orderdetails[0].deliverycharges |number:2 )|| "00.00" }}/-</small></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" style="text-align:right"><strong>Total:    
+                        {{(orderdetails[0].totalAmount = (getTotal() + orderdetails[0].deliverycharges) |number:2 )|| "00.00" }}/-</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" style="text-align:right;padding-top: 40px;">
+                            <small>Proprietor / Director   </small>
+                            <br>
+                        <label>{{ companyDetails[0].owner | uppercase }}</label></td>
+                    </tr>
+                </tbody>
+            </table>
+      
+ 
+    </div>
+</div>

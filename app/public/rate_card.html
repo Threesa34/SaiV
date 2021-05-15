@@ -1,0 +1,128 @@
+<div class="wrapper">
+    <div ng-include="'./public/navbar.html'"></div>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top" style="top:50px;">
+        <a class="navbar-brand" href="">Rate Card</a>
+        <a class="navbar-brand ml-auto" href="" ng-click="shareRateCard('ratecard-print')"><i class="fa fa-share-alt"
+            aria-hidden="true"></i></a> 
+        <div class="row">
+            <div class="col-8"><input class="form-control btn-sm" placeholder="Search" ng-model="search.name"></td></div>
+        <div class="col-4">
+            <select class="form-control btn-sm" id="type" ng-model="productType" ng-options="obj.value as obj.title for obj in ProductsType">
+                <option value="" selected disabled>Type</option>
+            </select>
+        </div>
+        </div>
+    
+      </nav>
+    <div class="container-fluid section mt-4 pt-4">
+        <div class="row mt-4 pt-4">
+            
+            <div class="col-md-3 lg-3 xl-3 col-12 ml-auto">
+                <form>
+                <div class="input-group">
+                    <span class="input-group-addon">Rate per Qty.</span>
+                    <select class="form-control" ng-model="rate_per_qty" ng-options="obj for obj in ['10','5','1']">
+                        <option selected disabled>--CHOOSE--</option>
+                    </select>
+                  </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row mt-3" ng-init="getProductList();productTypes();productUnits();getCompanyDetailsforInvoice()">
+            <div class="col-12 col-md-12 col-lg-12" ng-if="ProductsList.length > 0">
+                <div class="table-responsive">
+                    <table id="ratecard-print" class="table table-striped table-bordered text-nowrap" >
+                        <thead>
+                            <tr>
+                                <td colspan="4">
+                                    <div class="row" style="position: relative;">
+                                        <div style="position: absolute;left: 18px;" >
+                                            
+                                                <img src="http://103.252.7.5:8029/uploads/{{companyDetails[0].logoimg}}" style="height: 60px;width: auto;"/>
+                                            
+                                        </div>
+                                        <div class="col-10 col-md-10 ml-auto">
+                                            <div class="inv-header col-12 col-md-12 text-center">{{companyDetails[0].name}}</div>
+                                            <div class="inv-descriotion col-12 col-md-12 text-center">{{companyDetails[0].description}}</div>
+                                            <div class="col-12 col-md-12 text-left inv-descriotion">
+                                                <small>{{companyDetails[0].address}}</small>
+                                            </div>
+                                            <div class="inv-descriotion col-12 col-md-12 text-left">
+                                                <small ng-if="companyDetails[0].mobile">
+                                                    {{companyDetails[0].mobile}}</small>
+                                                <small ng-if="companyDetails[0].altmobile != null">
+                                                    ,
+                                                </small>
+                                                <small>{{companyDetails[0].altmobile}}</small> <small ng-if="companyDetails[0].email">,
+                                                    {{companyDetails[0].email}}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-md-4">
+                    
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr style="padding-bottom: -10px;">
+                                <td colspan="2">
+                    
+                                    <div class="col-12 col-md-12 col-lg-12">
+                                    <div class="Table inv-cust">
+                                        <div class="Row">
+                                            <div class="Cell" style="font-size: 10px;">
+                                                <strong>Rate Card</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </td>
+                                <td colspan="2" class="text-right">
+                    
+                                    <div class="col-12 col-md-12">
+                                        <small>Date</small> 
+                                    </div>
+                                    <div class="col-12 col-md-12">
+                                        <small>{{CurrentDate | date:"dd/MM/yyyy"}}</small>
+                                    </div>
+                                </td>
+                            </tr>
+                           
+                        </thead>
+                        <thead>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Unit</th>
+                                <th>Rate / {{rate_per_qty}}kg.</th>
+                              
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="_data in ProductsList | filter:{ type: productType } | filter: search.name">
+                                <td>{{$index +1}}</td>
+                                <td>{{_data.name}}  <span class="marathi-input">{{_data.marathi_name}}</span></td>
+                               
+                                <td>{{_data.unit}}</td>
+                                <td  contenteditable class="text-right">
+                                    {{_data.rate | number:2}}
+                                   <!--  <input class="form-control input-sm" id="inputsm" ng-model="_data.rate" type="number" style="width: 75px;" placeholder="Rate"> -->
+                                </td>
+                               
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12" ng-if="ProductsList.length == 0">
+            <div class="alert alert-danger text-center">
+                <strong>No record found!</strong>
+              </div>
+        </div>
+
+    </div>
+</div>
+
+
+</div>
+

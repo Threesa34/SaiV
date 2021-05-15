@@ -1,0 +1,153 @@
+<div class="wrapper">
+    <div ng-include="'./public/navbar.html'"></div>
+    
+    <div class="container-fluid section">
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-12">
+                <h4>Customers Order Report</h4>
+            </div>
+            <div class="col-md-4 col-lg-4 col-12">
+                <!-- <a class="btn btn-sm btn-info">Print</a> -->
+            </div>
+
+            <div class="col-md-6 col-lg-6 col-12 ml-auto">
+                <div class="row">
+                    <div class="col-md-4 col-12 col-lg-4" ng-if="userDetails.role == 'Superadmin' || userDetails.role == 'Admin'">
+                            <div class="form-group">
+                                    <label for="order-date">Customer</label>
+                                    <input type="text" class="form-control btn-sm" ng-model="customername" id="customername"
+                 name="customername" uib-typeahead="obj as obj.name for obj in CustomersList | filter:$viewValue " typeahead-on-select="getOrderReport(customername,orderDate_from, orderDate_to );SetCustomerid(customername.id)" placeholder="Search Customer" autocomplete="off"  >
+                                </div>
+                    </div>
+                    <div class="col-md-4 col-6 col-lg-4">
+                            <div class="form-group">
+                                    <label for="order-date">Order Date From</label>
+                                    <input ui-date="dateOptionsFilters" id="order-date" ng-model="orderDate_from" ng-change="getOrderReport(customername,orderDate_from, orderDate_to )" class="form-control"/>
+                                </div>
+                    </div>
+                    <div class="col-md-4 col-6 col-lg-4">
+                            <div class="form-group">
+                                    <label for="order-date">To</label>
+                                    <input ui-date="dateOptionsFilters" id="order-date-to" ng-model="orderDate_to" ng-change="getOrderReport(customername,orderDate_from, orderDate_to )" class="form-control"/>
+                                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-4 col-lg-4 colxl-4">
+                <input class="form-control" placeholder="Search" ng-model="search.order"/> &nbsp;
+
+                <a class="navbar-brand" href="" ng-click="shareOrderReport('report-print')"><i class="fa fa-print"
+                    aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <div class="row mt-3" ng-init="getCompanyDetailsforInvoice();getCustomerList()">
+            <div class="col-12 col-md-12 col-lg-12" ng-if="(Customerid != undefined && Customerid > 0) && orderReportData.length > 0">
+                <div class="table-responsive"  id="report-print">
+                    <table class="table table-bordered" style=" margin-left: 2.5px;display: fixed;width: 3.74in;font-size:10px;">
+                        <thead>
+                            <tr>
+                                <td colspan="3">
+                                    <div class="row" style="position: relative;">
+                                        <div style="position: absolute;left: 18px;" >
+                                            
+                                                <img src="http://103.252.7.5:8029/uploads/{{companyDetails[0].logoimg}}" style="height: 60px;width: auto;"/>
+                                            
+                                        </div>
+                                        <div class="col-10 col-md-10 ml-auto">
+                                            <div class="inv-header col-12 col-md-12 text-center">{{companyDetails[0].name}}</div>
+                                            <div class="inv-descriotion col-12 col-md-12 text-center">{{companyDetails[0].description}}</div>
+                                            <div class="col-12 col-md-12 text-left inv-descriotion">
+                                                <small>{{companyDetails[0].address}}</small><small ng-if="companyDetails[0].mobile">,
+                                                    {{companyDetails[0].mobile}}</small>
+                                                <small ng-if="companyDetails[0].altmobile != null">
+                                                    ,
+                                                </small>
+                                                <small>{{companyDetails[0].altmobile}}</small> <small ng-if="companyDetails[0].email">,
+                                                    {{companyDetails[0].email}}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-md-4">
+                    
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr style="padding-bottom: -10px;">
+                                <td colspan="2.5">
+                    
+                                    <div class="col-12 col-md-12 col-lg-12">
+                                    <div class="Table inv-cust">
+                                        <div class="Row">
+                                            <div class="Cell" style="font-size: 10px;">
+                                                <strong>{{orderReportData[0].customer_name}}</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </td>
+                                <td colspan="2.5" class="text-right">
+                    
+                                    <div class="col-12 col-md-12">
+                                        <small>Invoice Date</small> 
+                                    </div>
+                                    <div class="col-12 col-md-12">
+                                        <small>{{orderDate_from | date:"dd/MM/yyyy"}} To {{orderDate_to | date:"dd/MM/yyyy"}}</small>
+                                    </div>
+                                </td>
+                            </tr>
+                           
+                        </thead>
+                        <thead>
+                           
+                                <th>#</th>
+                               <!--  <th  ng-if="(userDetails.role == 'Superadmin' || userDetails.role == 'Admin') && !customername">Customer</th> -->
+                                <th>Invoice Date</th>
+                                <!-- <th>No. of Products</th> -->
+                                <th>Amount</th>
+                        </thead>
+                        <tbody>
+                           
+                            <tr ng-repeat="_data in orderReportData | filter:search.order" style="padding-bottom: -10px;">
+                                <td>{{$index +1}}</td>
+                             <!--   <td  ng-if="(userDetails.role == 'Superadmin' || userDetails.role == 'Admin') && !customername">{{_data.customer_name}}</td> -->
+                               <td class="text-center">{{_data.invoicedate | date:'dd/MM/yyyy'}}</td>
+                             <!--   <td>{{_data.total_items}}</td> -->
+                               <td class="text-right">{{_data.net_amount | number:2}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="text-right">
+                                    <strong>Total: {{CalculateTotalAmountInReport() | number:2}}</strong>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12" ng-if="orderReportData.length == 0">
+            <div class="alert alert-danger text-center">
+                <strong>No record found!</strong>
+              </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- <script>
+  $(document).ready(function() {
+    var table = $('#example').DataTable( {
+        fixedHeader: true,
+        lengthChange: true,
+        buttons: [ 'copy', 'excel', 'pdf' ]
+    } );
+ 
+    table.buttons().container()
+        .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+} );
+</script> -->
