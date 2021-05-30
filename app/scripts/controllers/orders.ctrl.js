@@ -1602,10 +1602,25 @@ angular.module('MyApp')
             })
         }
 
+
+        function sortRatedProducts()
+        {
+            $scope.RatedProductsList = [];
+
+            $scope.RatedProductsList = $scope.ProductsList.filter(function(value){
+                    return value.rate != undefined && value.rate > 0;
+            });
+        }
+
         $scope.shareRateCard = function(sectionid)
         {
-            // sortSelectedItems();
-            // var height = ;
+             sortRatedProducts();
+
+             setTimeout(function(){
+                
+
+                // var height = ;
+
             var height = $( '#'+sectionid ).height();
             var width = '3.74in';
 
@@ -1614,6 +1629,10 @@ angular.module('MyApp')
             Order.shareRateCard().save({content:content,size:{height:height,width:width}}).$promise.then(function(response){
                 window.open("http://103.252.7.5:8029/rate_cards/"+response.filename);
             });
+
+
+              }, 3000); //run this after 3 seconds
+            
 
         }
 
