@@ -1,6 +1,6 @@
 angular.module('MyApp')
   .factory('Order', ['$resource', function ($resource) {
-    var endurl= 'http://103.252.7.5:8029';
+    var endurl= 'http://localhost:8029';
     return{
 
       saveOrderDetails: function()
@@ -50,6 +50,12 @@ angular.module('MyApp')
         {}, { 'save': { method: 'POST',isArray:false } });
       },
 
+      SaveVendorPaymentCollection: function()
+      {
+        return $resource(endurl+'/api/SaveVendorPaymentCollection',
+        {}, { 'save': { method: 'POST',isArray:false } });
+      },
+
 
       saveLumsumPaymentDetails: function()
       {
@@ -96,6 +102,12 @@ angular.module('MyApp')
       deleteOrder: function()
       {
         return $resource(endurl+'/api/deleteOrder/:id',
+        {}, { 'query': { method: 'GET',isArray:false } });
+      },
+
+      deletePurchaseOrder: function()
+      {
+        return $resource(endurl+'/api/deletePurchaseOrder/:id',
         {}, { 'query': { method: 'GET',isArray:false } });
       },
 
@@ -160,9 +172,26 @@ angular.module('MyApp')
         {}, { 'save': { method: 'POST',isArray:false } });
       },
 
+      getVendorPaymentReport: function()
+      {
+        return $resource(endurl+'/api/getVendorPaymentReport',
+        {}, { 'save': { method: 'POST',isArray:false } });
+      },
+
       getPendingPaymentsData: function()
       {
         return $resource(endurl+'/api/getPendingPaymentsData',
+        {}, { 'save': { method: 'POST',isArray:false } });
+      },
+
+      getVendorsPendingPaymentsData: function()
+      {
+        return $resource(endurl+'/api/getVendorsPendingPaymentsData',
+        {}, { 'save': { method: 'POST',isArray:false } });
+      },
+      getPurchasedItemsList: function()
+      {
+        return $resource(endurl+'/api/getPurchasedItemsList',
         {}, { 'save': { method: 'POST',isArray:false } });
       },
 
@@ -195,6 +224,12 @@ angular.module('MyApp')
       GetDateWiseOrder: function()
       {
         return $resource(endurl+'/api/GetDateWiseOrder',
+        {}, { 'save': { method: 'POST',isArray:false } });
+      },
+
+      getAllInvoicesCopies: function()
+      {
+        return $resource(endurl+'/api/getAllInvoicesCopies',
         {}, { 'save': { method: 'POST',isArray:false } });
       },
 

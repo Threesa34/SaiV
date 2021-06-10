@@ -2817,3 +2817,33 @@ button.badge-top-right:before {
       display: table-cell;
       text-align: left;
   }
+
+
+  #sidenav{
+	min-height: 100%;
+
+  }
+  #sidenav > ul{
+     height: 40rem;
+    overflow-y:auto;
+    overflow-x:hidden;
+  }
+
+
+  
+.scroll-style::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(184, 181, 181, 0.733);
+	background-color: #F5F5F5;
+}
+
+.scroll-style::-webkit-scrollbar
+{
+	width: 6px;
+	background-color: #F5F5F5;
+}
+
+.scroll-style::-webkit-scrollbar-thumb
+{
+	background-color: #a5a5a5;
+}

@@ -86,11 +86,11 @@
         <script>
 
     $(document).ready(function() {
-        $.get("http://103.252.7.5:8029/api/checkuserSession", function( data ) {
+        $.get("http://localhost:8029/api/checkuserSession", function( data ) {
                 if(data.status == false)
                 {
-                  if(location.href != 'http://103.252.7.5:8029/#!/')
-                     location.href = "http://103.252.7.5:8029"
+                  if(location.href != 'http://localhost:8029/#!/')
+                     location.href = "http://localhost:8029"
                 }
             });
     });

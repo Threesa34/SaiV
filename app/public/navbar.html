@@ -11,15 +11,15 @@
       </div>
   </nav>
 
-  <aside class="main_sidebar animated" id="sidenav" ng-show="openNav">
-      <ul>
+  <aside class="main_sidebar animated mb-4" id="sidenav" ng-show="openNav">
+      <ul class="mb-4 scroll-style">
           <li ng-click="RedirectLink('/dashboard')"><i class="fa icon icon-dashboard-1"></i><a href="">Dashboard</a></li>
           <li ng-click="RedirectLink('/products')"><i class="fa icon icon-diet"></i><a href="">Products</a></li>
           <li ng-if="userDetails.role == 'Superadmin' || userDetails.role == 'Admin'" ng-click="RedirectLink('/customers')"><i class="fa fa-users"></i><a href="">Customers</a></li>
           <li ng-if="userDetails.role == 'Superadmin' || userDetails.role == 'Admin'" ng-click="RedirectLink('/vendors')"><i class="fa fa-users"></i><a href="">Vendors</a></li>
           <li ng-click="RedirectLink('/users')"><i class="fa fa-user-circle-o"></i><a href="">Users</a></li>
           <li ng-if="userDetails.role == 'Superadmin' || userDetails.role == 'Admin'" ng-click="RedirectLink('/poorders')"><i class="fa icon icon-order"></i><a href="">Purchase Order</a></li>
-          <li ng-if="userDetails.role == 'Superadmin' || userDetails.role == 'Admin'" ng-click="RedirectLink('/purchase_report')"><i class="fa icon icon-order"></i><a href="">Purchase Order Report</a></li>
+          <li ng-if="userDetails.role == 'Superadmin' || userDetails.role == 'Admin'" ng-click="RedirectLink('/purchase_report')"><i class="fa icon icon-order"></i><a href="">Vendor Payment Report</a></li>
           <li ng-click="RedirectLink('/orders')"><i class="fa icon icon-order"></i><a href="">Orders</a></li>
           <li ng-click="RedirectLink('/invoice')"><i class="fa icon icon-invoice"></i><a href="">Invoice</a></li>
           <li ng-if="userDetails.role == 'Superadmin' || userDetails.role == 'Admin'" ng-click="RedirectLink('/quick_invoice')"><i class="fa fa-file-text-o"></i><a href="">Quick Invoice</a></li>
@@ -30,7 +30,13 @@
           <li ng-if="userDetails.role == 'Superadmin' || userDetails.role == 'Admin'" ng-click="RedirectLink('/customer_payment_report')"><i class="fa fa-file-text-o"></i><a href="">Payment Report</a></li>
           <li ng-if="userDetails.role == 'Superadmin' || userDetails.role == 'Admin'" ng-click="RedirectLink('/saled_qty_report')"><i class="fa fa-file-text-o"></i><a href="">Saled Quantity Report</a></li>
           <li ng-if="userDetails.role == 'Superadmin' || userDetails.role == 'Admin'" ng-click="RedirectLink('/rate_card')"><i class="fa fa-file-text-o"></i><a href="">Rate Card</a></li>
+          <li ng-if="userDetails.role == 'Superadmin' || userDetails.role == 'Admin'" ng-click="RedirectLink('/pdf_invoice_copies')"><i class="fa fa-file-text-o"></i><a href="">PDF Invoice copies</a></li>
           <li ng-if="userDetails.role == 'Superadmin'" ng-click="RedirectLink('/companies')"><i class="fa fa-users"></i><a href="">Companies</a></li>
+          <li ></li>
+          <li ></li>
+          <li ></li>
+          <li ></li>
+          <li ></li>
       </ul>
   </aside>
 </div>

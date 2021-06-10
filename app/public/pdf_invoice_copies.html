@@ -1,0 +1,42 @@
+<div class="wrapper">
+    <div ng-include="'./public/navbar.html'"></div>
+    
+    <div class="container-fluid section">
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-12">
+                <h4>Customers Order copies<sub>(PDF)</sub></sup></h4>
+            </div>
+        </div>
+
+        <div class="row" ng-init="getCustomerList()">
+           
+            <div class="col-12 col-md-4 col-lg-4 col-xl-4">
+                <div class="form-group">
+                    <label for="customername">Search Customer:</label>
+                    <input type="text" class="form-control btn-sm" ng-model="paymentDetails.customername" id="customername"
+                        name="customername" uib-typeahead="obj as obj.name for obj in CustomersList | filter:$viewValue " typeahead-on-select="getAllInvoicesCopies(paymentDetails.customername)" placeholder="Search Customer" >
+                </div>
+            </div>
+            <div class="col-12 col-md-4 col-lg-4 col-xl-4 ml-auto">
+                <div class="form-group">
+                    <label for="customername"></label>
+                    <input class="form-control" placeholder="Search" ng-model="search.name"/>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="row mt-2" ng-if="filesList.length > 0">
+            <div class="col-md-2 col-lg-2 col-xl-2 col-sm-6 col-6 mt-1" ng-repeat="_data in filesList| filter: search.name">
+
+                <div class="card">
+                    <a href="http://localhost:8029/invoices/{{_data}}" download>
+                      <img src="./images/pdf.png" alt="{{_data}}" class=" col-12 ml-auto mr-auto mt-1">
+                      <div class="caption p-2">
+                        <label>{{_data}}</label>
+                      </div>
+                    </a>
+                  </div>
+            </div>    
+        </div>
+</div>

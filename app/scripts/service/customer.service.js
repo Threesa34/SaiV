@@ -1,6 +1,6 @@
 angular.module('MyApp')
   .factory('Customer', ['$resource', function ($resource) {
-    var endurl= 'http://103.252.7.5:8029';
+    var endurl= 'http://localhost:8029';
     return{
 
         CustomerTypes: function () {

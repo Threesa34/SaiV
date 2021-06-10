@@ -56,7 +56,7 @@
                                 <td>{{_data.total_items}}</td>
                                 <td class="text-right">{{_data.netamt | number:2}}</td>
                                 <td>{{_data.ordered_by}}</td>
-                                <td class="text-center text-nowrap"><a class="btn btn-warning btn-sm" ng-click="setSessionId(_data.id)"href="#!place_poorder" ng-show="(userDetails.role == 'Superadmin' || userDetails.role == 'Admin' )" ><i class="fa fa-pencil"></i> Edit</a>&nbsp;<button class="btn btn-danger btn-sm" ng-click="deleteOrder(_data.id)" ><i class="fa fa-trash"></i> Delete</button>&nbsp;<button class="btn btn-info btn-sm" ng-if="_data.paymentstatus == 0" ng-click="SetPaidStatus(_data.id)"><i class="fa fa-inr"></i> Paid</button>
+                                <td class="text-center text-nowrap"><a class="btn btn-warning btn-sm" ng-click="setSessionId(_data.id)"href="#!place_poorder" ng-show="(userDetails.role == 'Superadmin' || userDetails.role == 'Admin' )" ><i class="fa fa-pencil"></i> Edit</a>&nbsp;<button class="btn btn-danger btn-sm" ng-click="deletePurchaseOrder(_data.id)" ><i class="fa fa-trash"></i> Delete</button><!-- &nbsp;<button class="btn btn-info btn-sm" ng-if="_data.paymentstatus == 0" ng-click="SetPaidStatus(_data.id)"><i class="fa fa-inr"></i> Paid</button> -->
                                 </td>
                             </tr>
                         </tbody>

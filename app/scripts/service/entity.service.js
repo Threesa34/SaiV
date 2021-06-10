@@ -1,6 +1,6 @@
 angular.module('MyApp')
   .factory('Entity', ['$resource', 'Upload', function ($resource, Upload) {
-    var endurl= 'http://103.252.7.5:8029';
+    var endurl= 'http://localhost:8029';
     return{
 
         VerifyCompanyEmail: function () {

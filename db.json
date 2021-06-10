@@ -52,5 +52,8 @@
     },
     {
         "Query":"CREATE TABLE IF NOT EXISTS `advance_payment` ( `id` INT NOT NULL AUTO_INCREMENT ,`customerid` INT NULL ,`amount` FLOAT NULL , `updateddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `vendors_advance_payment` ( `id` INT NOT NULL AUTO_INCREMENT ,`vendorid` INT NULL ,`amount` FLOAT NULL , `updateddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;"
     }
 ]

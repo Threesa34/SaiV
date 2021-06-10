@@ -20,12 +20,12 @@ angular.module('MyApp')
 
             $scope.checkuserSession = function()
         {
-            $http.get("http://103.252.7.5:8029/api/checkuserSession")
+            $http.get("http://localhost:8029/api/checkuserSession")
             .then(function(response) {
               if(response.data.status == false)
                 {
-                  if(location.href != 'http://103.252.7.5:8029/#!/')
-                     location.href = "http://103.252.7.5:8029"
+                  if(location.href != 'http://localhost:8029/#!/')
+                     location.href = "http://localhost:8029"
                 }
             });
         }
@@ -148,6 +148,31 @@ angular.module('MyApp')
               }).then(function(result) {
                 if (result.value) {
                     Order.deleteOrder().query({ id: orderid}).$promise.then(function (response) {   
+                      Swal({
+                        type: response.type,
+                        title: response.title,
+                        text: response.message,
+                      }).then(function()  {
+                        $scope.ListOrders();
+                      })
+                    });
+                  }
+                });
+        }
+
+        $scope.deletePurchaseOrder = function(orderid)
+        {
+            Swal({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+              }).then(function(result) {
+                if (result.value) {
+                    Order.deletePurchaseOrder().query({ id: orderid}).$promise.then(function (response) {   
                       Swal({
                         type: response.type,
                         title: response.title,
@@ -633,6 +658,21 @@ angular.module('MyApp')
             });
         };
 
+        $scope.getAllInvoicesCopies = function(customerDetails)
+        {
+
+            Order.getAllInvoicesCopies().save(customerDetails).$promise.then(function (response) {
+                if(response.filesList)
+                {
+                    $scope.filesList = response.filesList;
+                }
+                if(response.status)
+                {
+                    $scope.filesList =[];
+                }
+            });
+        };
+
         $scope.togglePaymentMethod = function(btntype)
         {
             if(btntype == 'orderwise')
@@ -844,8 +884,8 @@ angular.module('MyApp')
                     if(!response.status)
                     {
                         $scope.companyDetails = response.companyDetails;
-
-
+                    if($scope.orderdetails != undefined && $scope.orderdetails.length > 0)
+                        {
                         if($scope.orderdetails[0].alternate_color_print != 1)
                         {
                             $scope.companyDetails[0].heading_color = '#000000';
@@ -874,6 +914,11 @@ angular.module('MyApp')
                                 }
                         }
                     }
+                    else{
+                        $scope.companyDetails[0].heading_color = '#000000';
+                        $scope.companyDetails[0].desc_color = '#000000';
+                    }
+                    }
             });
         }
 
@@ -897,9 +942,9 @@ angular.module('MyApp')
             var printContents = document.getElementById(divName).innerHTML;
             var popupWin = window.open('', '_blank', 'width=300,height=300');
             popupWin.document.open();
-            var htmlContent = '<html><head><link rel="stylesheet" type="text/css" href="http://103.252.7.5:8029/styles/style.css" /><link rel="stylesheet" href="http://103.252.7.5:8029/bower_components/bootstrap/dist/css/bootstrap.css"><style>table.table-bordered > thead > tr > th{border:1.2px solid black;}</style></head><body onload="window.print()"><div class=""><div class="col-md-6 col-lg-6 col-6 col-sm-6 mt-4 pt-4" style="padding-right:5px;padding-left:7px;">' + printContents + '</div></div></body></html>';
+            var htmlContent = '<html><head><link rel="stylesheet" type="text/css" href="http://localhost:8029/styles/style.css" /><link rel="stylesheet" href="http://localhost:8029/bower_components/bootstrap/dist/css/bootstrap.css"><style>table.table-bordered > thead > tr > th{border:1.2px solid black;}</style></head><body onload="window.print()"><div class=""><div class="col-md-6 col-lg-6 col-6 col-sm-6 mt-4 pt-4" style="padding-right:5px;padding-left:7px;">' + printContents + '</div></div></body></html>';
 
-            //'<html><head><link rel="stylesheet" type="text/css" href="http://103.252.7.5:8029/styles/style.css" /><link rel="stylesheet" href="http://103.252.7.5:8029/bower_components/bootstrap/dist/css/bootstrap.css"></head><body onload="window.print()">' + printContents + '</body></html>'
+            //'<html><head><link rel="stylesheet" type="text/css" href="http://localhost:8029/styles/style.css" /><link rel="stylesheet" href="http://localhost:8029/bower_components/bootstrap/dist/css/bootstrap.css"></head><body onload="window.print()">' + printContents + '</body></html>'
             popupWin.document.write(htmlContent);
             popupWin.document.close();
           } 
@@ -909,9 +954,9 @@ angular.module('MyApp')
             var printContents = document.getElementById(divName).innerHTML;
             // var billheader = document.getElementById('bill-header').innerHTML;
 
-                var htmlContent = '<html><head><link rel="stylesheet" type="text/css" href="http://103.252.7.5:8029/styles/style.css" /><link rel="stylesheet" href="http://103.252.7.5:8029/bower_components/bootstrap/dist/css/bootstrap.css"><style>table.table-bordered > thead > tr > th{border:1.2px solid black;}</style></head><body><div class=""><div class="col-md-6 col-lg-6 col-6 col-sm-6 mt-4 pt-4" style="padding-right:4px;padding-left:11.2px;position:relative;top:-20px;">' + printContents + '</div></div></body></html>';
+                var htmlContent = '<html><head><link rel="stylesheet" type="text/css" href="http://localhost:8029/styles/style.css" /><link rel="stylesheet" href="http://localhost:8029/bower_components/bootstrap/dist/css/bootstrap.css"><style>table.table-bordered > thead > tr > th{border:1.2px solid black;}</style></head><body><div class=""><div class="col-md-6 col-lg-6 col-6 col-sm-6 mt-4 pt-4" style="padding-right:4px;padding-left:11.2px;position:relative;top:-20px;">' + printContents + '</div></div></body></html>';
 
-                //var billHeaderContent = '<html><head><link rel="stylesheet" type="text/css" href="http://103.252.7.5:8029/styles/style.css" /><link rel="stylesheet" href="http://103.252.7.5:8029/bower_components/bootstrap/dist/css/bootstrap.css"></head><body><div class=""><div class="col-md-6 col-lg-6 col-6 col-sm-6 pl-2 pr-2">' + billheader + '</div></div></body></html>';
+                //var billHeaderContent = '<html><head><link rel="stylesheet" type="text/css" href="http://localhost:8029/styles/style.css" /><link rel="stylesheet" href="http://localhost:8029/bower_components/bootstrap/dist/css/bootstrap.css"></head><body><div class=""><div class="col-md-6 col-lg-6 col-6 col-sm-6 pl-2 pr-2">' + billheader + '</div></div></body></html>';
 
                 var billHeaderContent = '';
 
@@ -928,7 +973,7 @@ angular.module('MyApp')
                 $scope.orderReportData[0].toDate = $scope.orderDate_to;
 
                 Order.shareOrderReport().save({billheader:billHeaderContent,invoiceContent:htmlContent,orderData: $scope.orderReportData[0],size:{height:height,width:width}}).$promise.then(function(response){
-                    window.open("http://103.252.7.5:8029/reports/"+response.filename);
+                    window.open("http://localhost:8029/reports/"+response.filename);
                 });
 
           } 
@@ -937,9 +982,9 @@ angular.module('MyApp')
             var printContents = document.getElementById(divName).innerHTML;
             // var billheader = document.getElementById('bill-header').innerHTML;
 
-                var htmlContent = '<html><head><link rel="stylesheet" type="text/css" href="http://103.252.7.5:8029/styles/style.css" /><link rel="stylesheet" href="http://103.252.7.5:8029/bower_components/bootstrap/dist/css/bootstrap.css"><style>table.table-bordered > thead > tr > th{border:1.2px solid black;}</style></head><body><div class=""><div class="col-md-6 col-lg-6 col-6 col-sm-6 mt-4 pt-4" style="padding-right:4px;padding-left:11.2px;position:relative;top:-20px;">' + printContents + '</div></div></body></html>';
+                var htmlContent = '<html><head><link rel="stylesheet" type="text/css" href="http://localhost:8029/styles/style.css" /><link rel="stylesheet" href="http://localhost:8029/bower_components/bootstrap/dist/css/bootstrap.css"><style>table.table-bordered > thead > tr > th{border:1.2px solid black;}</style></head><body><div class=""><div class="col-md-6 col-lg-6 col-6 col-sm-6 mt-4 pt-4" style="padding-right:4px;padding-left:11.2px;position:relative;top:-20px;">' + printContents + '</div></div></body></html>';
 
-                //var billHeaderContent = '<html><head><link rel="stylesheet" type="text/css" href="http://103.252.7.5:8029/styles/style.css" /><link rel="stylesheet" href="http://103.252.7.5:8029/bower_components/bootstrap/dist/css/bootstrap.css"></head><body><div class=""><div class="col-md-6 col-lg-6 col-6 col-sm-6 pl-2 pr-2">' + billheader + '</div></div></body></html>';
+                //var billHeaderContent = '<html><head><link rel="stylesheet" type="text/css" href="http://localhost:8029/styles/style.css" /><link rel="stylesheet" href="http://localhost:8029/bower_components/bootstrap/dist/css/bootstrap.css"></head><body><div class=""><div class="col-md-6 col-lg-6 col-6 col-sm-6 pl-2 pr-2">' + billheader + '</div></div></body></html>';
 
                 var billHeaderContent = '';
 
@@ -951,10 +996,11 @@ angular.module('MyApp')
                 var height = $( '#'+divName ).height();
                 var width = $( '#'+divName ).width();
             
+                $( '#'+divName ).css('display','none');
 
                 Order.sharePaymentReport().save({billheader:billHeaderContent,invoiceContent:htmlContent,customerName: $scope.customerName,size:{height:height,width:width}}).$promise.then(function(response){
                     $( '#'+divName ).css('display','none');
-                    window.open("http://103.252.7.5:8029/reports/"+response.filename);
+                    window.open("http://localhost:8029/reports/"+response.filename);
                 });
 
           } 
@@ -983,9 +1029,9 @@ angular.module('MyApp')
             var printContents = document.getElementById(divName).innerHTML;
             // var billheader = document.getElementById('bill-header').innerHTML;
 
-                var htmlContent = '<html><head><link rel="stylesheet" type="text/css" href="http://103.252.7.5:8029/styles/style.css" /><link rel="stylesheet" href="http://103.252.7.5:8029/bower_components/bootstrap/dist/css/bootstrap.css"><style>table.table-bordered > thead > tr > td{border:1.2px solid '+$scope.companyDetails[0].desc_color+' !important;}table.table-bordered > thead > tr > th{border:1.2px solid '+$scope.companyDetails[0].desc_color+' !important;}table.table-bordered > tbody > tr > td{border:1.2px solid '+$scope.companyDetails[0].desc_color+' !important;}</style></head><body><div class=""><div class="col-md-6 col-lg-6 col-6 col-sm-6 mt-4 pt-4" style="padding-right:4px;padding-left:11.2px;position:relative;top:-20px;">' + printContents + '</div></div></body></html>';
+                var htmlContent = '<html><head><link rel="stylesheet" type="text/css" href="http://localhost:8029/styles/style.css" /><link rel="stylesheet" href="http://localhost:8029/bower_components/bootstrap/dist/css/bootstrap.css"><style>table.table-bordered > thead > tr > td{border:1.2px solid '+$scope.companyDetails[0].desc_color+' !important;}table.table-bordered > thead > tr > th{border:1.2px solid '+$scope.companyDetails[0].desc_color+' !important;}table.table-bordered > tbody > tr > td{border:1.2px solid '+$scope.companyDetails[0].desc_color+' !important;}</style></head><body><div class=""><div class="col-md-6 col-lg-6 col-6 col-sm-6 mt-4 pt-4" style="padding-right:4px;padding-left:11.2px;position:relative;top:-20px;">' + printContents + '</div></div></body></html>';
 
-                //var billHeaderContent = '<html><head><link rel="stylesheet" type="text/css" href="http://103.252.7.5:8029/styles/style.css" /><link rel="stylesheet" href="http://103.252.7.5:8029/bower_components/bootstrap/dist/css/bootstrap.css"></head><body><div class=""><div class="col-md-6 col-lg-6 col-6 col-sm-6 pl-2 pr-2">' + billheader + '</div></div></body></html>';
+                //var billHeaderContent = '<html><head><link rel="stylesheet" type="text/css" href="http://localhost:8029/styles/style.css" /><link rel="stylesheet" href="http://localhost:8029/bower_components/bootstrap/dist/css/bootstrap.css"></head><body><div class=""><div class="col-md-6 col-lg-6 col-6 col-sm-6 pl-2 pr-2">' + billheader + '</div></div></body></html>';
 
                 var billHeaderContent = '';
 
@@ -1000,7 +1046,7 @@ angular.module('MyApp')
                
 
                 Order.shareInvoice().save({billheader:billHeaderContent,invoiceContent:htmlContent,orderData: $scope.orderdetails[0],size:{height:height,width:width}}).$promise.then(function(response){
-                    window.open("http://103.252.7.5:8029/invoices/"+response.filename);
+                    window.open("http://localhost:8029/invoices/"+response.filename);
                 });
 
           } 
@@ -1084,6 +1130,16 @@ angular.module('MyApp')
             Order.getPaymentReport().save([]).$promise.then(function (response) {
                 if(!response.status)
                 $scope.paymentReportData = response.paymentReportData;
+
+            });
+            
+        }
+
+        $scope.getVendorPaymentReport = function()
+        {
+            Order.getVendorPaymentReport().save([]).$promise.then(function (response) {
+                if(!response.status)
+                $scope.vendorPaymentReportData = response.paymentReportData;
 
             });
             
@@ -1178,6 +1234,121 @@ angular.module('MyApp')
         }
 
 
+
+        // VENDORS PAYMENT
+
+        $scope.selectedVendorsPayments = [];
+        $scope.getVendorsPendingPaymentsData = function(id, cust_name)
+        {
+         
+            $scope.customerName = cust_name;
+            $scope.vendor_id = id;
+            Order.getVendorsPendingPaymentsData().save({vendor_id:id}).$promise.then(function (response) {
+                if(!response.status)
+                {
+                $scope.vendorsPendingPaymentsData = response.pendingPaymentData;
+
+                /* if(sessionStorage.getItem('prevId') != undefined && sessionStorage.getItem('prevId') == id)
+                {
+                   
+                }
+                else
+                {$scope.selectedVendorsPayments = [];}
+
+                sessionStorage.setItem('prevId',id); */
+                }
+            });
+            
+        }
+
+        $scope.showitemsList = false;
+
+        $scope.getPurchasedItemsList = function(purchasebject)
+        {
+            $scope.purchaseObject = purchasebject;
+            
+            Order.getPurchasedItemsList().save({purchase_id:purchasebject.id}).$promise.then(function (response) {
+                if(!response.status)
+                {
+                $scope.purchaseItemsList = response.purchaseItemsList;
+
+                $scope.showitemsList = true;
+                }
+            });
+            
+        }
+
+        // $scope.PaymentCollection = false;
+       
+        $scope.SetItemInArrayForVendors = function(obj)
+        {
+            if($scope.selectedVendorsPayments.length > 0)
+            {
+                var existitem = [];
+                existitem = $scope.selectedVendorsPayments.filter(function(val){
+                    return val.id == obj.id
+                });
+                if(existitem.length <= 0)
+                {
+                    obj.isSelected =  true;
+                    $scope.selectedVendorsPayments.push(obj);
+                }
+                else
+                {
+                    $scope.selectedVendorsPayments.map(function(val, index){
+                        if(val.id == obj.id)
+                        $scope.selectedVendorsPayments.splice(index, 1);
+                        obj.isSelected =  false;
+                    });
+                }
+            }
+            else
+            {
+                obj.isSelected =  true;
+                $scope.selectedVendorsPayments.push(obj);
+            }
+        }
+
+
+        $scope.getTotalActualPendingAmountOfVendors = function()
+        {
+            if( $scope.vendorsPendingPaymentsData != undefined &&  $scope.vendorsPendingPaymentsData.length > 0){
+                var total = 0;
+                $scope.vendorsPendingPaymentsData.map(function(value){
+                    total = total + value.pendingpayment;
+                });
+                return total;
+            }
+        }
+
+        $scope.getTotalPendingAmountOfVendors = function()
+        {
+            if($scope.selectedVendorsPayments.length > 0)
+            {
+                    var total = 0;
+
+                    $scope.selectedVendorsPayments.map(function(value){
+                        total = total + value.pendingpayment;
+                    });
+                    return total;
+
+            }
+            else if( $scope.vendorsPendingPaymentsData != undefined &&  $scope.vendorsPendingPaymentsData.length > 0){
+                var total = 0;
+                $scope.vendorsPendingPaymentsData.map(function(value){
+                    total = total + value.pendingpayment;
+                });
+                return total;
+            }
+        }
+
+   
+        
+
+        // VENDORS PAYMENT
+
+
+
         $scope.FillSameQtyInCart = function()
         {
             if($scope.orderdetails != undefined && $scope.orderdetails.length > 0)
@@ -1225,6 +1396,62 @@ angular.module('MyApp')
                 });
 
                 Order.SavePaymentCollection().save($scope.selectedPayments).$promise.then(function(response){
+                    Swal({
+                        type: response.type,
+                        title: response.title,
+                        text: response.message,
+                    }).then(function()  {
+                        if(response.status == 0)
+                        {
+                            
+                        }
+                        else
+                        {
+                            $("#modalPendingPayments").modal('hide');
+                            $scope.bulkPaymentCollection = [];
+                            location.reload();
+                        }
+                    });
+                });
+            }
+
+        }
+
+        $scope.SaveVendorPaymentCollection = function()
+        {
+
+            var tempPayment = $scope.bulkPaymentCollection[0].paid_amt;
+                
+                var paymentKey = Object.keys($scope.bulkPaymentCollection[0]);
+
+                if(tempPayment > 0)
+                {
+                $scope.selectedVendorsPayments.map(function(value){
+
+                    value.vendorid = $scope.vendor_id;
+                    if(tempPayment >= value.pendingpayment)
+                    {
+                        value.paid_amount = value.pendingpayment;
+                        value.pending_amount = 0;
+                        tempPayment = tempPayment - value.pendingpayment;
+                    }
+                    else
+                    {
+                        value.paid_amount = tempPayment;
+                        value.pending_amount = value.pendingpayment - tempPayment;
+                        tempPayment = 0;
+                    }
+
+                    if(paymentKey != undefined && paymentKey.length > 0)
+                    {
+                        paymentKey.map(function(val){
+                            value[val] = $scope.bulkPaymentCollection[0][val];
+                        });
+                    }
+
+                });
+
+                Order.SaveVendorPaymentCollection().save($scope.selectedVendorsPayments).$promise.then(function(response){
                     Swal({
                         type: response.type,
                         title: response.title,
@@ -1624,10 +1851,10 @@ angular.module('MyApp')
             var height = $( '#'+sectionid ).height();
             var width = '3.74in';
 
-            var content = ' <html><head><link rel="stylesheet" type="text/css" href="http://103.252.7.5:8029/styles/style.css" /><link rel="stylesheet" href="http://103.252.7.5:8029/bower_components/bootstrap/dist/css/bootstrap.css"><style>table.table-bordered > thead > tr > td{border:1.2px solid black !important;}table.table-bordered > thead > tr > th{border:1.2px solid black !important;}table.table-bordered > tbody > tr > td{border:1.2px solid black !important;}</style></head><body><div class=""><div class="col-md-6 col-lg-6 col-6 col-sm-6 mt-4 pt-4" style="padding-right:4px;padding-left:11.2px;position:relative;top:-20px;"><table class="table table-striped table-bordered text-nowrap" style="margin-left: 2.5px;display: fixed;width: 3.74in;font-size:10px;">'+$('#'+sectionid).html()+'</table></div></div></body></html>';
+            var content = ' <html><head><link rel="stylesheet" type="text/css" href="http://localhost:8029/styles/style.css" /><link rel="stylesheet" href="http://localhost:8029/bower_components/bootstrap/dist/css/bootstrap.css"><style>table.table-bordered > thead > tr > td{border:1.2px solid black !important;}table.table-bordered > thead > tr > th{border:1.2px solid black !important;}table.table-bordered > tbody > tr > td{border:1.2px solid black !important;}</style></head><body><div class=""><div class="col-md-6 col-lg-6 col-6 col-sm-6 mt-4 pt-4" style="padding-right:4px;padding-left:11.2px;position:relative;top:-20px;"><table class="table table-striped table-bordered text-nowrap" style="margin-left: 2.5px;display: fixed;width: 3.74in;font-size:10px;">'+$('#'+sectionid).html()+'</table></div></div></body></html>';
             
             Order.shareRateCard().save({content:content,size:{height:height,width:width}}).$promise.then(function(response){
-                window.open("http://103.252.7.5:8029/rate_cards/"+response.filename);
+                window.open("http://localhost:8029/rate_cards/"+response.filename);
             });
 
 

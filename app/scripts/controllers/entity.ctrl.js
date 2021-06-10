@@ -1,7 +1,7 @@
 angular.module('MyApp')
 	.controller('EntityController', ['$scope', '$http', '$route', '$location', '$window', '$timeout', 'Upload', 'Entity', function ($scope, $http, $route, $location, $window, $timeout, Upload, Entity) {
 
-    var endurl= 'http://103.252.7.5:8029';
+    var endurl= 'http://localhost:8029';
         $scope.config = {
             itemsPerPage: 5,
             fillLastPage: true
@@ -17,12 +17,12 @@ angular.module('MyApp')
 
           $scope.checkuserSession = function()
         {
-            $http.get("http://103.252.7.5:8029/api/checkuserSession")
+            $http.get("http://localhost:8029/api/checkuserSession")
             .then(function(response) {
               if(response.data.status == false)
                 {
-                  if(location.href != 'http://103.252.7.5:8029/#!/')
-                     location.href = "http://103.252.7.5:8029"
+                  if(location.href != 'http://localhost:8029/#!/')
+                     location.href = "http://localhost:8029"
                 }
             });
         }

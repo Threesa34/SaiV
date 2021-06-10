@@ -126,6 +126,11 @@ angular.module('MyApp', ['ngResource',
       controller:"OrderController"
     })
     
+    .when("/pdf_invoice_copies", {
+      templateUrl : "public/pdf_invoice_copies.html",
+      controller:"OrderController"
+    })
+    
     .when("/user_profile", {
       templateUrl : "public/user_profile.html",
       controller:"LoginController"
