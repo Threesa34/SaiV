@@ -1705,11 +1705,6 @@ angular.module('MyApp')
                 });
         }
 
-       
-      
-
-        $scope.SelectedVendor = undefined;
-        $scope.SelectedVendorId = undefined;
 
         $scope.setVendorDetails = function(vendorDetails)
         {
@@ -1742,7 +1737,7 @@ angular.module('MyApp')
                         selectedItems[0].orderdate = $scope.poOrderdate;
                         selectedItems[0].netamt = $scope.totalPoAmount;
 
-                        selectedItems[0] = {...selectedItems[0], vendor: $scope.SelectedVendorId}
+                        selectedItems[0] = {...selectedItems[0], vendor: $scope.SelectedVendor.id}
                         console.log(selectedItems);
                         Order.savePurchaseOrderDetails().save(selectedItems).$promise.then(function(response){
                             Swal({
