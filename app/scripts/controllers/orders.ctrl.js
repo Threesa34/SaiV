@@ -1738,7 +1738,7 @@ angular.module('MyApp')
                     if($scope.purchaseOrderDetails && $scope.purchaseOrderDetails.length > 0)
                         selectedItems[0].orderid = $scope.purchaseOrderDetails[0].orderid;
 
-                        selectedItems[0].vendorid = $scope.SelectedVendorId || $scope.purchaseOrderDetails[0].vendorid;
+                        selectedItems[0].vendorid = $scope.SelectedVendorId;
                         selectedItems[0].orderdate = $scope.poOrderdate;
                         selectedItems[0].netamt = $scope.totalPoAmount;
 
