@@ -1710,6 +1710,11 @@ angular.module('MyApp')
 
         $scope.SelectedVendor = undefined;
 
+        $scope.setVendorDetails = function(vendorDetails)
+        {
+            $scope.SelectedVendor = vendorDetails.id;
+        }
+
         $scope.savePurchaseOrderDetails = function()
         {   
        

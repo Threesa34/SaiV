@@ -21,12 +21,12 @@
         <div class="col-6 col-md-6 col-lg-6 col-xl-6" ng-show="userDetails.role != 'customer' && userDetails.role != 'customer_admin'">
          <div class="form-group">
              <label for="vendorname">Vendor:</label>
-             <select  class="form-control btn-sm" id="vendorname"
+             <!-- <select  class="form-control btn-sm" id="vendorname"
              name="vendorname" ng-model="SelectedVendor" ng-options="obj.id as obj.name for obj in VendorsList">
              <option selected disabled value="">--SELECT--</option>
-            </select>
-           <!--   <input type="text" ng-model="orderDetails.customername" id="customername"
-                 name="customername" uib-typeahead="obj as obj.name for obj in CustomersList | filter:$viewValue " typeahead-on-select="setCustomerDetails(orderDetails.customername)" placeholder="Search Customer" autocomplete="off"  > -->
+            </select> -->
+            <input type="text" ng-model="SelectedVendor" id="vendorname"
+                 name="vendorname" uib-typeahead="obj as obj.name for obj in VendorsList | filter:$viewValue " typeahead-on-select="setVendorDetails(SelectedVendor)" placeholder="Search Vendor" autocomplete="off"  > 
          </div>
         </div>
         <div class="col-6 col-md-6 col-lg-6 col-xl-6" ng-class="{'col-12':(userDetails.role == 'customer' && userDetails.role == 'customer_admin')}">
