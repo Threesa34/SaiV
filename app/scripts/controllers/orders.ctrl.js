@@ -1743,7 +1743,7 @@ angular.module('MyApp')
                         selectedItems[0].netamt = $scope.totalPoAmount;
 
                         selectedItems[0] = {...selectedItems[0], vendor: $scope.SelectedVendorId}
-
+                        console.log(selectedItems);
                         Order.savePurchaseOrderDetails().save(selectedItems).$promise.then(function(response){
                             Swal({
                                 type: response.type,
